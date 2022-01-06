@@ -1,0 +1,84 @@
+import '../views/calendar_view.dart';
+import '../views/explore_view.dart';
+import '../views/profile_view.dart';
+import '../widgets/application_bar.dart';
+import 'package:flutter/material.dart';
+
+class TabsPage extends StatefulWidget {
+  const TabsPage({Key? key}) : super(key: key);
+
+  @override
+  State<TabsPage> createState() => _TabsPageState();
+}
+
+class _TabsPageState extends State<TabsPage> {
+  var _selectedPageIndex = 0;
+  var _pages = [];
+
+  void _selectPage(int index) {
+    setState(() {
+      _selectedPageIndex = index;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      {'title': 'Explore', 'page': const ExploreView()},
+      {'title': 'My Events', 'page': const CalendarView()},
+      {'title': 'Profile & Settings', 'page': const ProfileView()},
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: ApplicationBar(title: _pages[_selectedPageIndex]['title']),
+      body: _pages[_selectedPageIndex]['page'] as Widget,
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Theme.of(context).colorScheme.primaryVariant,
+        currentIndex: _selectedPageIndex,
+        onTap: _selectPage,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        selectedFontSize: 12,
+        unselectedFontSize: 11,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(Icons.explore_outlined),
+            ),
+            activeIcon: Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(Icons.explore),
+            ),
+            label: 'Explore',
+          ),
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(Icons.calendar_today_outlined),
+            ),
+            activeIcon: Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(Icons.calendar_today),
+            ),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(Icons.person_outline),
+            ),
+            activeIcon: Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(Icons.person),
+            ),
+            label: 'Profile',
+          )
+        ],
+      ),
+    );
+  }
+}
