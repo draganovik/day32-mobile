@@ -1,3 +1,4 @@
+import 'package:day32/views/signin_page.dart';
 import 'package:flutter/material.dart';
 
 import '../views/tabs_page.dart';
@@ -13,39 +14,12 @@ class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Day32',
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: const TabsPage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('My App'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Welcome!',
-            ),
-          ],
-        ),
-      ),
+      home: TabsPage(),
     );
   }
 }
