@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:googleapis/calendar/v3.dart';
+import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventDataSource extends CalendarDataSource {
-  EventDataSource(List<Event> source) {
+  EventDataSource(List<cal.Event> source) {
     appointments = source;
   }
 
@@ -27,7 +27,9 @@ class EventDataSource extends CalendarDataSource {
   @override
   Color getColor(int index) {
     //return _getEventData(index).colorId;
-    return const Color(0xFF42A5F5);
+    //var s = Color
+    return (googleEventColors[_getEventData(index).colorId.toString()]?.last ??
+        Colors.blue) as Color;
   }
 
   @override
@@ -35,13 +37,27 @@ class EventDataSource extends CalendarDataSource {
     return _getEventData(index).end == null;
   }
 
-  Event _getEventData(int index) {
+  cal.Event _getEventData(int index) {
     final dynamic event = appointments![index];
-    late final Event eventData;
-    if (event is Event) {
+    late final cal.Event eventData;
+    if (event is cal.Event) {
       eventData = event;
     }
 
     return eventData;
   }
 }
+
+Map<String, List<Object>> googleEventColors = {
+  '1': ['Lavander', Colors.deepPurple.shade200],
+  '2': ['Sage', Colors.green.shade400],
+  '3': ['Grape', Colors.deepPurple],
+  '4': ['Flamingo', Colors.red.shade400],
+  '5': ['Banana', Colors.yellow.shade700],
+  '6': ['Tangerine', Colors.orange.shade700],
+  '7': ['Peacock', Colors.blue],
+  '8': ['Graphite', Colors.grey.shade600],
+  '9': ['Blueberry', Colors.blue.shade800],
+  '10': ['Basil', Colors.green.shade800],
+  '11': ['Tomato', Colors.red.shade900],
+};

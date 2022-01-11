@@ -1,12 +1,14 @@
 import 'dart:convert';
 
-import 'package:day32/models/EventDataSource.dart';
+import 'package:day32/providers/google_events_provider.dart';
+import 'package:day32/widgets/edit_event_modal.dart';
+import 'package:provider/provider.dart';
+
+import '../models/EventDataSource.dart';
+import '../providers/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/calendar/v3.dart';
+import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sf;
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
-import 'package:http/http.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarView extends StatefulWidget {
@@ -17,64 +19,70 @@ class CalendarView extends StatefulWidget {
 }
 
 class _CalendarViewState extends State<CalendarView> {
-  List<Event>? source;
-  List<Event> _getDataSource() {
-    final List<Event> events = <Event>[];
-    for (var event in source!) {
-      events.add(event);
-    }
-    return events;
-  }
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>[
-      CalendarApi.calendarScope,
-    ],
-  );
-  Client httpClient = Client();
-
-  Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    } finally {
-      httpClient = (await _googleSignIn.authenticatedClient())!;
-      var calendarApi = CalendarApi(httpClient);
-      var events = await calendarApi.events
-          .list('mladenoneacc@gmail.com', timeMin: DateTime.now());
-      setState(() {
-        source = events.items;
-      });
-      //print(json.encode(events));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: source == null
-            ? Center(
-                child: ElevatedButton(
-                  child: const Text('Google Sign In'),
-                  onPressed: () => _handleSignIn(),
-                ),
-              )
-            : sf.SfCalendar(
-                firstDayOfWeek: 1,
-                view: sf.CalendarView.schedule,
-                dataSource: EventDataSource(_getDataSource()),
-                onTap: (CalendarTapDetails details) {
-                  dynamic appointments = details.appointments;
-                  DateTime date = details.date!;
-                  CalendarElement element = details.targetElement;
-                  if (appointments != null) {
-                    print(json.encode(appointments));
+    return Consumer2<AuthProvider, GoogleEventsProvider>(
+      builder: (context, auth, gep, child) {
+        if (auth.authClient != null && gep.events.isNotEmpty) {
+          return sf.SfCalendar(
+            headerHeight: 50,
+            showCurrentTimeIndicator: true,
+            headerStyle: const CalendarHeaderStyle(
+                textAlign: TextAlign.left,
+                backgroundColor: Colors.transparent,
+                textStyle: TextStyle(
+                  color: Colors.black87,
+                )),
+            scheduleViewSettings: const ScheduleViewSettings(
+                hideEmptyScheduleWeek: true,
+                appointmentItemHeight: 80,
+                monthHeaderSettings: MonthHeaderSettings(
+                    height: 50,
+                    textAlign: TextAlign.left,
+                    backgroundColor: Colors.transparent,
+                    monthTextStyle: TextStyle(
+                      color: Colors.black87,
+                    )),
+                appointmentTextStyle:
+                    TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+            firstDayOfWeek: 1,
+            view: sf.CalendarView.schedule,
+            dataSource: EventDataSource(gep.events),
+            onTap: (CalendarTapDetails details) {
+              dynamic appointments = details.appointments;
+              DateTime date = details.date!;
+              CalendarElement element = details.targetElement;
+              if (appointments != null) {
+                showEditEventModal(appointments[0]).then((value) {
+                  if (value != null) {
+                    Future.delayed(const Duration(seconds: 1), () {
+                      setState(() {
+                        gep.loadEvents();
+                      });
+                    });
                   }
-                },
-                /*monthViewSettings: const sf.MonthViewSettings(
-                    appointmentDisplayMode:
-                        sf.MonthAppointmentDisplayMode.appointment),*/
-              ));
+                });
+              }
+            },
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Future showEditEventModal([cal.Event? event]) async {
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      isDismissible: false,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      context: context,
+      builder: (ctx) {
+        return EditEventModal(editEvent: event);
+      },
+    );
   }
 }
