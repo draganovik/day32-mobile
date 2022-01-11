@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:syncfusion_flutter_calendar/calendar.dart';

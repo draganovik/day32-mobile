@@ -1,7 +1,6 @@
-import 'dart:convert';
-
-import 'package:day32/providers/google_events_provider.dart';
-import 'package:day32/widgets/edit_event_modal.dart';
+import '../providers/app_settings_provider.dart';
+import '../providers/google_events_provider.dart';
+import '../widgets/edit_event_modal.dart';
 import 'package:provider/provider.dart';
 
 import '../models/EventDataSource.dart';
@@ -21,58 +20,56 @@ class CalendarView extends StatefulWidget {
 class _CalendarViewState extends State<CalendarView> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AuthProvider, GoogleEventsProvider>(
-      builder: (context, auth, gep, child) {
-        if (auth.authClient != null && gep.events.isNotEmpty) {
-          return sf.SfCalendar(
-            headerHeight: 50,
-            appointmentTimeTextFormat: 'HH:ss',
-            showCurrentTimeIndicator: true,
-            headerStyle: const CalendarHeaderStyle(
+    var appData = Provider.of<AppSettingsProvider>(context);
+    var auth = Provider.of<AuthProvider>(context);
+    var gep = Provider.of<GoogleEventsProvider>(context);
+    if (auth.authClient != null && gep.events.isNotEmpty) {
+      return sf.SfCalendar(
+        headerHeight: 60,
+        appointmentTimeTextFormat: 'HH:ss',
+        showCurrentTimeIndicator: true,
+        headerStyle: const CalendarHeaderStyle(
+            textAlign: TextAlign.left,
+            backgroundColor: Colors.transparent,
+            textStyle: TextStyle(
+              color: Colors.black87,
+            )),
+        scheduleViewSettings: const ScheduleViewSettings(
+            hideEmptyScheduleWeek: true,
+            appointmentItemHeight: 80,
+            monthHeaderSettings: MonthHeaderSettings(
+                height: 50,
                 textAlign: TextAlign.left,
                 backgroundColor: Colors.transparent,
-                textStyle: TextStyle(
+                monthTextStyle: TextStyle(
                   color: Colors.black87,
                 )),
-            scheduleViewSettings: const ScheduleViewSettings(
-                hideEmptyScheduleWeek: true,
-                appointmentItemHeight: 80,
-                monthHeaderSettings: MonthHeaderSettings(
-                    height: 50,
-                    textAlign: TextAlign.left,
-                    backgroundColor: Colors.transparent,
-                    monthTextStyle: TextStyle(
-                      color: Colors.black87,
-                    )),
-                appointmentTextStyle:
-                    TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-            firstDayOfWeek: 1,
-            view: sf.CalendarView.schedule,
-            dataSource: EventDataSource(gep.events),
-            onTap: (CalendarTapDetails details) {
-              dynamic appointments = details.appointments;
-              DateTime date = details.date!;
-              CalendarElement element = details.targetElement;
-              if (appointments != null) {
-                showEditEventModal(appointments[0]).then((value) {
-                  if (value != null) {
-                    Future.delayed(const Duration(seconds: 1), () {
-                      setState(() {
-                        gep.loadEvents();
-                      });
-                    });
-                  }
+            appointmentTextStyle:
+                TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        firstDayOfWeek: 1,
+        view: appData.mainCalendarController.view ?? sf.CalendarView.schedule,
+        controller: appData.mainCalendarController,
+        dataSource: EventDataSource(gep.events),
+        onTap: (CalendarTapDetails details) {
+          dynamic appointments = details.appointments;
+          if (appointments != null) {
+            showEditEventModal(appointments[0]).then((value) {
+              if (value != null) {
+                Future.delayed(const Duration(seconds: 1), () {
+                  setState(() {
+                    gep.loadEvents();
+                  });
                 });
               }
-            },
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
+            });
+          }
+        },
+      );
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
   }
 
   Future showEditEventModal([cal.Event? event]) async {

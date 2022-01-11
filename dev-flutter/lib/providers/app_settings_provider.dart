@@ -2,12 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class AppSettingsProvider with ChangeNotifier {
   static const String settingStore = 'app_data';
   late int _tabViewSelectedPage = 1;
+  CalendarController _mainCalendarController = CalendarController();
   bool hasLoaded = false;
   AppSettingsProvider() {
+    _mainCalendarController.view = CalendarView.schedule;
     _restoreAppData();
   }
 
@@ -17,6 +20,8 @@ class AppSettingsProvider with ChangeNotifier {
 
     final _appData = json.decode(prefs.getString(settingStore) ?? '');
     _tabViewSelectedPage = _appData['tab_view_selected_index'];
+    _mainCalendarController.view =
+        CalendarView.values[_appData['main_calendar_view']];
     hasLoaded = true;
     notifyListeners();
   }
@@ -25,12 +30,17 @@ class AppSettingsProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final _appData = json.encode({
       'tab_view_selected_index': _tabViewSelectedPage,
+      'main_calendar_view': _mainCalendarController.view!.index
     });
-    prefs.setString(settingStore, _appData);
+    await prefs.setString(settingStore, _appData);
   }
 
   int get tabViewSelectedPage {
     return _tabViewSelectedPage;
+  }
+
+  CalendarController get mainCalendarController {
+    return _mainCalendarController;
   }
 
   set tabViewSelectedPage(value) {
@@ -38,10 +48,13 @@ class AppSettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  set mainCalendarController(value) {
+    _mainCalendarController = value;
+    notifyListeners();
+  }
+
   @override
   void notifyListeners() {
-    // TODO: implement notifyListeners
-    super.notifyListeners();
-    _cacheAppData();
+    _cacheAppData().then((value) => super.notifyListeners());
   }
 }

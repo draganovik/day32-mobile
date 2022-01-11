@@ -1,5 +1,5 @@
-import 'package:day32/providers/auth_provider.dart';
-import 'package:day32/widgets/settings_list_item.dart';
+import '../providers/auth_provider.dart';
+import '../widgets/settings_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,9 +1,6 @@
-import 'package:date_time_picker/date_time_picker.dart';
-import 'package:day32/models/EventDataSource.dart';
-import 'package:day32/providers/app_settings_provider.dart';
-import 'package:day32/providers/google_events_provider.dart';
-import 'package:day32/widgets/edit_event_modal.dart';
-import 'package:googleapis/calendar/v3.dart';
+import '../providers/app_settings_provider.dart';
+import '../providers/google_events_provider.dart';
+import '../widgets/edit_event_modal.dart';
 import 'package:provider/provider.dart';
 
 import '../views/calendar_view.dart';

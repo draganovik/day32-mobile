@@ -1,8 +1,8 @@
-import 'package:day32/providers/app_settings_provider.dart';
-import 'package:day32/providers/auth_provider.dart';
-import 'package:day32/providers/google_events_provider.dart';
-import 'package:day32/views/signin_page.dart';
-import 'package:day32/views/splash_page.dart';
+import '../providers/app_settings_provider.dart';
+import '../providers/auth_provider.dart';
+import '../providers/google_events_provider.dart';
+import '../views/signin_page.dart';
+import '../views/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
