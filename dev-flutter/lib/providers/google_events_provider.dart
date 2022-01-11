@@ -27,6 +27,7 @@ class GoogleEventsProvider with ChangeNotifier {
   Future<void> addEventToCalendar(Event event) async {
     try {
       _calendarApi.events.insert(event, 'primary');
+      _googleEvents?.add(event);
       notifyListeners();
     } catch (err) {
       print(err.toString());
@@ -38,6 +39,23 @@ class GoogleEventsProvider with ChangeNotifier {
   Future<void> updateEventToCalendar(Event event) async {
     try {
       _calendarApi.events.update(event, 'primary', event.id ?? '');
+      _googleEvents?.forEach((element) {
+        if (element.id == event.id) {
+          element = event;
+        }
+      });
+      notifyListeners();
+    } catch (err) {
+      print(err.toString());
+      rethrow;
+      // handle error
+    }
+  }
+
+  Future<void> deleteEventFromCalendar(Event event) async {
+    try {
+      _calendarApi.events.delete('primary', event.id ?? '');
+      _googleEvents?.removeWhere((element) => element.id == event.id);
       notifyListeners();
     } catch (err) {
       print(err.toString());

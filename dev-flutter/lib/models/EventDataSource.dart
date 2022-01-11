@@ -11,30 +11,32 @@ class EventDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    return _getEventData(index).start?.dateTime ?? DateTime.now();
+    return _getEventData(index).start?.dateTime ??
+        _getEventData(index).start?.date ??
+        DateTime.now();
   }
 
   @override
   DateTime getEndTime(int index) {
-    return _getEventData(index).end?.dateTime ?? DateTime.now();
+    return _getEventData(index).end?.dateTime ??
+        _getEventData(index).start?.date ??
+        DateTime.now();
   }
 
   @override
   String getSubject(int index) {
-    return _getEventData(index).summary ?? 'Unnamed';
+    return _getEventData(index).summary ?? '(No title)';
   }
 
   @override
   Color getColor(int index) {
-    //return _getEventData(index).colorId;
-    //var s = Color
     return (googleEventColors[_getEventData(index).colorId.toString()]?.last ??
         Colors.blue) as Color;
   }
 
   @override
   bool isAllDay(int index) {
-    return _getEventData(index).end == null;
+    return _getEventData(index).start!.date != null;
   }
 
   cal.Event _getEventData(int index) {

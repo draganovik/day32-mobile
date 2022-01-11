@@ -26,6 +26,7 @@ class _CalendarViewState extends State<CalendarView> {
         if (auth.authClient != null && gep.events.isNotEmpty) {
           return sf.SfCalendar(
             headerHeight: 50,
+            appointmentTimeTextFormat: 'HH:ss',
             showCurrentTimeIndicator: true,
             headerStyle: const CalendarHeaderStyle(
                 textAlign: TextAlign.left,

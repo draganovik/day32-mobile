@@ -111,7 +111,7 @@ class _TabsPageState extends State<TabsPage> {
         return EditEventModal(editEvent: event);
       },
     ).then((value) {
-      if (value == 'added') {
+      if (value != null) {
         Future.delayed(const Duration(seconds: 1), () {
           setState(() {
             Provider.of<GoogleEventsProvider>(context, listen: false)
