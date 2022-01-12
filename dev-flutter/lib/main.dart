@@ -1,3 +1,5 @@
+import 'package:day32/providers/firebase_events_provider.dart';
+
 import '../providers/app_settings_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/google_events_provider.dart';
@@ -29,6 +31,7 @@ class _ApplicationState extends State<Application> {
       providers: [
         ChangeNotifierProvider(create: (context) => AppSettingsProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => FirebaseEventsProvider()),
         ChangeNotifierProxyProvider<AuthProvider, GoogleEventsProvider>(
           update: (ctx, auth, previous) =>
               GoogleEventsProvider(auth.authClient),

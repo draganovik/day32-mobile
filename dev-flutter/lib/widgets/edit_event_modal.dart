@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:day32/providers/firebase_events_provider.dart';
 import '../providers/google_events_provider.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +21,7 @@ class _EditEventModalState extends State<EditEventModal> {
   bool _isLoading = false;
   bool _isMoodify = false;
   bool _isAllDay = false;
+  bool _isPublic = false;
   InputDecoration _inputDecoration(BuildContext context, String label) =>
       InputDecoration(
           alignLabelWithHint: true,
@@ -58,9 +62,10 @@ class _EditEventModalState extends State<EditEventModal> {
       });
       _form.currentState?.save();
       if (!_isMoodify) {
-        await Provider.of<GoogleEventsProvider>(context, listen: false)
-            .addEventToCalendar(_event!)
-            .catchError((error) {
+        final googleResponse =
+            await Provider.of<GoogleEventsProvider>(context, listen: false)
+                .addEventToCalendar(_event!)
+                .catchError((error) {
           return showDialog<void>(
               context: context,
               builder: (ctx) => AlertDialog(
@@ -72,22 +77,23 @@ class _EditEventModalState extends State<EditEventModal> {
                           child: Text('OK'))
                     ],
                   ));
-        }).then((response) {
-          setState(() {
-            _isLoading = false;
-          });
-          Navigator.of(context).pop('added');
         });
+        await Provider.of<FirebaseEventsProvider>(context, listen: false)
+            .addEvent(_event!);
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pop('added');
       } else {
         if (_event?.id != '') {
           await Provider.of<GoogleEventsProvider>(context, listen: false)
-              .updateEventToCalendar(_event!)
-              .then((value) {
-            setState(() {
-              _isLoading = false;
-            });
-            Navigator.of(context).pop('eddited');
+              .updateEventToCalendar(_event!);
+          await Provider.of<FirebaseEventsProvider>(context, listen: false)
+              .updateEvent(_event!);
+          setState(() {
+            _isLoading = false;
           });
+          Navigator.of(context).pop('eddited');
         }
       }
     }
@@ -253,8 +259,10 @@ class _EditEventModalState extends State<EditEventModal> {
                           CheckboxListTile(
                             contentPadding:
                                 const EdgeInsets.only(left: 10, right: 0),
-                            value: false,
-                            onChanged: (newVal) {},
+                            value: _isPublic,
+                            onChanged: (status) {
+                              _isPublic = status ?? false;
+                            },
                             title: const Text('Share event to public calendar'),
                           ),
                           TextFormField(
