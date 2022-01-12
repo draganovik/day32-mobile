@@ -58,7 +58,6 @@ class GoogleEventsProvider with ChangeNotifier {
       _googleEvents?.removeWhere((element) => element.id == event.id);
       notifyListeners();
     } catch (err) {
-      print(err.toString());
       rethrow;
       // handle error
     }

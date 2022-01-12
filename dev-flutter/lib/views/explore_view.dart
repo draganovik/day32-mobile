@@ -17,7 +17,6 @@ class ExploreView extends StatelessWidget {
           );
         }
         if (snap.hasError) {
-          print(snap.hasError);
           return const Center(
             child: Text('Can\'t connect to the service right now'),
           );
@@ -28,7 +27,9 @@ class ExploreView extends StatelessWidget {
           );
         }
         return Column(
-            children: fep.events.map((event) => Text(event.summary!)).toList());
+            children: fep.events
+                .map((event) => Text(event.summary ?? '(No title)'))
+                .toList());
       },
     );
   }

@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:day32/providers/firebase_events_provider.dart';
 
 import '../providers/app_settings_provider.dart';
@@ -10,19 +12,16 @@ import 'package:provider/provider.dart';
 
 import '../views/tabs_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const Application());
 }
 
-class Application extends StatefulWidget {
+class Application extends StatelessWidget {
   const Application({Key? key}) : super(key: key);
-  // This widget is the root of your application.
-
-  @override
-  State<Application> createState() => _ApplicationState();
-}
-
-class _ApplicationState extends State<Application> {
   // This widget is the root of your application.
 
   @override
@@ -34,30 +33,25 @@ class _ApplicationState extends State<Application> {
         ChangeNotifierProvider(create: (context) => FirebaseEventsProvider()),
         ChangeNotifierProxyProvider<AuthProvider, GoogleEventsProvider>(
           update: (ctx, auth, previous) =>
-              GoogleEventsProvider(auth.authClient),
+              GoogleEventsProvider(auth.googleAuthClient),
           create: (ctx) => GoogleEventsProvider(null),
         ),
       ],
-      child: Consumer<AuthProvider>(
-          builder: (context, auth, child) => MaterialApp(
-                title: 'Day32',
-                theme: ThemeData(primarySwatch: Colors.teal),
-                home: FutureBuilder(
-                    future: auth.isAuth,
-                    builder: (ctx, authSnap) {
-                      if (authSnap.connectionState == ConnectionState.done) {
-                        if (auth.authUser == null) {
-                          return SignInPage();
-                        }
-                        return const TabsPage();
-                      }
-                      return const SplashPage();
-                    }),
-                routes: {
-                  '/home': (context) => const TabsPage(),
-                  SignInPage.routeName: (context) => SignInPage()
-                },
-              )),
+      child: MaterialApp(
+        title: 'Day32',
+        theme: ThemeData(primarySwatch: Colors.teal),
+        home: Consumer<AuthProvider>(builder: (context, auth, child) {
+          if (auth.isSignedIn) {
+            return const TabsPage();
+          } else {
+            return SignInPage();
+          }
+        }),
+        routes: {
+          '/home': (context) => const TabsPage(),
+          SignInPage.routeName: (context) => SignInPage()
+        },
+      ),
     );
   }
 }

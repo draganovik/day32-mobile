@@ -23,12 +23,12 @@ class ProfileView extends StatelessWidget {
                 leading: CircleAvatar(
                     radius: 30.0,
                     backgroundImage: NetworkImage(
-                        authProvider.authUser?.photoUrl ?? '',
+                        authProvider.googleUser?.photoUrl ?? '',
                         scale: 2)),
-                title:
-                    Text(authProvider.authUser?.displayName ?? 'Unknown user'),
-                subtitle:
-                    Text(authProvider.authUser?.email ?? 'Email not provided'),
+                title: Text(
+                    authProvider.googleUser?.displayName ?? 'Unknown user'),
+                subtitle: Text(
+                    authProvider.googleUser?.email ?? 'Email not provided'),
               ),
             ),
             const Divider(),
@@ -47,7 +47,7 @@ class ProfileView extends StatelessWidget {
             const Divider(),
             SettingsListItem(
                 title: 'Log out',
-                onTap: () => authProvider.googleLogOut(),
+                onTap: () => authProvider.firebaseSignOut(),
                 colorTheme: Theme.of(context).colorScheme.error,
                 iconGraph: Icons.logout_outlined),
           ],

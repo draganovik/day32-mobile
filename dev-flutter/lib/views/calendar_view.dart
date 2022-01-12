@@ -23,8 +23,9 @@ class _CalendarViewState extends State<CalendarView> {
     var appData = Provider.of<AppSettingsProvider>(context);
     var auth = Provider.of<AuthProvider>(context);
     var gep = Provider.of<GoogleEventsProvider>(context);
-    if (auth.authClient != null && gep.events.isNotEmpty) {
+    if (auth.isSignedIn && gep.events.isNotEmpty) {
       return sf.SfCalendar(
+        timeZone: 'Central Europe Standard Time',
         headerHeight: 60,
         appointmentTimeTextFormat: 'HH:ss',
         showCurrentTimeIndicator: true,

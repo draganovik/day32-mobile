@@ -24,7 +24,6 @@ class FirebaseEventsProvider with ChangeNotifier {
       _firebaseEvents.clear();
       responseMap.forEach((key, value) {
         _firebaseEvents.add(Event.fromJson(value));
-        print(_firebaseEvents.length);
       });
     } catch (err) {
       rethrow;
