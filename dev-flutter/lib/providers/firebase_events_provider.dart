@@ -2,41 +2,36 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:googleapis/calendar/v3.dart';
-import 'package:http/http.dart' as http;
+import 'package:firebase_database/firebase_database.dart';
 
 class FirebaseEventsProvider with ChangeNotifier {
-  List<Event> _firebaseEvents = [];
-  final String _firebaseUrl = 'day-32.firebaseio.com';
-
-  void publishTest() {
-    Uri uri = Uri.https(_firebaseUrl, '/events.json');
-  }
+  final List<Event> _firebaseEvents = [];
+  FirebaseDatabase database = FirebaseDatabase.instance;
 
   List<Event> get events {
     return [..._firebaseEvents];
   }
 
   Future<void> fetchAndSetEvents() async {
-    Uri url = Uri.https(_firebaseUrl, '/events.json');
     try {
-      final response = await http.get(url);
-      final responseMap = json.decode(response.body) as Map<String, dynamic>;
+      DatabaseReference eventRef = FirebaseDatabase.instance.ref("events");
+      DatabaseEvent events = await eventRef.once();
       _firebaseEvents.clear();
+      final responseMap = json.decode(json.encode(events.snapshot.value)) ??
+          <String, dynamic>{};
       responseMap.forEach((key, value) {
         _firebaseEvents.add(Event.fromJson(value));
       });
     } catch (err) {
       rethrow;
-    } finally {
-      //notifyListeners();
     }
   }
 
   Future<void> addEvent(Event event) async {
-    Uri url = Uri.https(_firebaseUrl, '/events.json');
     try {
-      await http.post(url, body: jsonEncode(event));
-      _firebaseEvents.add(event);
+      DatabaseReference eventRef =
+          FirebaseDatabase.instance.ref("events/${event.id}");
+      await eventRef.set(json.decode(json.encode(event)));
       notifyListeners();
     } catch (err) {
       rethrow;
@@ -44,14 +39,15 @@ class FirebaseEventsProvider with ChangeNotifier {
   }
 
   Future<void> updateEvent(Event event) async {
+    DatabaseReference eventRef =
+        FirebaseDatabase.instance.ref("events/${event.id}");
     final updateIndex =
         _firebaseEvents.indexWhere((element) => element.id == event.id);
-    Uri url = Uri.https(_firebaseUrl, '/events.json');
+    await eventRef.update(json.decode(json.encode(event)));
     if (updateIndex > -1) {
-      await http.patch(url, body: json.encode(event));
       _firebaseEvents[updateIndex] = event;
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   Event getEventById(String id) {
@@ -59,17 +55,10 @@ class FirebaseEventsProvider with ChangeNotifier {
   }
 
   Future<void> deleteEventById(String id) async {
-    Uri url = Uri.https(_firebaseUrl, '/events/$id.json');
-    var delEventIndex =
-        _firebaseEvents.lastIndexWhere((element) => element.id == id);
-    var delEvent = _firebaseEvents[delEventIndex];
+    DatabaseReference refChild =
+        FirebaseDatabase.instance.ref("events").child(id);
     _firebaseEvents.removeWhere((element) => element.id == id);
+    await refChild.remove();
     notifyListeners();
-    final response = await http.delete(url);
-    if (response.statusCode >= 400) {
-      _firebaseEvents.insert(delEventIndex, delEvent);
-      notifyListeners();
-      throw Exception();
-    }
   }
 }

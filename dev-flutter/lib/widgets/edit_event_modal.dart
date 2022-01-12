@@ -62,34 +62,40 @@ class _EditEventModalState extends State<EditEventModal> {
       });
       _form.currentState?.save();
       if (!_isMoodify) {
-        final googleResponse =
+        final googleResponseEvent =
             await Provider.of<GoogleEventsProvider>(context, listen: false)
                 .addEventToCalendar(_event!)
                 .catchError((error) {
-          return showDialog<void>(
+          showDialog<void>(
               context: context,
               builder: (ctx) => AlertDialog(
-                    title: Text('Error happened'),
-                    content: Text('Connection failed'),
+                    title: const Text('Error happened'),
+                    content: const Text('Connection failed'),
                     actions: [
                       TextButton(
                           onPressed: () => Navigator.of(ctx).pop(),
-                          child: Text('OK'))
+                          child: const Text('OK'))
                     ],
                   ));
         });
-        await Provider.of<FirebaseEventsProvider>(context, listen: false)
-            .addEvent(_event!);
+        if (googleResponseEvent != null) {
+          await Provider.of<FirebaseEventsProvider>(context, listen: false)
+              .addEvent(googleResponseEvent);
+        }
+
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop('added');
       } else {
         if (_event?.id != '') {
-          await Provider.of<GoogleEventsProvider>(context, listen: false)
-              .updateEventToCalendar(_event!);
-          await Provider.of<FirebaseEventsProvider>(context, listen: false)
-              .updateEvent(_event!);
+          final googleResponseEvent =
+              await Provider.of<GoogleEventsProvider>(context, listen: false)
+                  .updateEventToCalendar(_event!);
+          if (googleResponseEvent != null) {
+            await Provider.of<FirebaseEventsProvider>(context, listen: false)
+                .updateEvent(googleResponseEvent);
+          }
           setState(() {
             _isLoading = false;
           });
@@ -100,14 +106,18 @@ class _EditEventModalState extends State<EditEventModal> {
   }
 
   Future<void> _deleteEvent(BuildContext ctx) async {
-    return await Provider.of<GoogleEventsProvider>(context, listen: false)
-        .deleteEventFromCalendar(_event!)
-        .then((value) {
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.of(context).pop('deleted');
+    final String? eventId = _event!.id;
+    final googleDeleted =
+        await Provider.of<GoogleEventsProvider>(context, listen: false)
+            .deleteEventFromCalendar(_event!);
+    if (googleDeleted && eventId != null) {
+      await Provider.of<FirebaseEventsProvider>(context, listen: false)
+          .deleteEventById(eventId);
+    }
+    setState(() {
+      _isLoading = false;
     });
+    Navigator.of(context).pop('deleted');
   }
 
   Future<String?> _showDeleteEventDialog() async {
@@ -216,7 +226,8 @@ class _EditEventModalState extends State<EditEventModal> {
                             },
                           ),
                           CheckboxListTile(
-                            contentPadding: EdgeInsets.only(left: 8, right: 0),
+                            contentPadding:
+                                const EdgeInsets.only(left: 8, right: 0),
                             value: _isAllDay,
                             onChanged: (newVal) {
                               setState(() {
@@ -326,8 +337,8 @@ class _EditEventModalState extends State<EditEventModal> {
                                       style: TextStyle(fontSize: 16),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 16),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 16),
                                         primary: Theme.of(context)
                                             .colorScheme
                                             .error),
@@ -380,7 +391,8 @@ class _EditEventModalState extends State<EditEventModal> {
                         .textTheme
                         .button
                         ?.copyWith(fontSize: 18),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
                   ),
                   child: Text(_isMoodify ? 'UPDATE EVENT' : 'ADD EVENT'))
             ],

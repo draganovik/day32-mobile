@@ -1,15 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:googleapis/calendar/v3.dart';
-import 'package:http/http.dart';
 
 class GoogleEventsProvider with ChangeNotifier {
   List<Event>? _googleEvents;
   late CalendarApi _calendarApi;
 
   GoogleEventsProvider(googleAuthClient) {
-    _calendarApi = CalendarApi(googleAuthClient ?? Client());
     if (googleAuthClient != null) {
-      loadEvents();
+      _calendarApi = CalendarApi(googleAuthClient);
+      if (googleAuthClient != null) {
+        loadEvents();
+      }
     }
   }
 
@@ -24,42 +25,48 @@ class GoogleEventsProvider with ChangeNotifier {
     return _googleEvents ?? [];
   }
 
-  Future<void> addEventToCalendar(Event event) async {
+  Future<Event?> addEventToCalendar(Event event) async {
+    Event? googleEvent;
     try {
-      _calendarApi.events.insert(event, 'primary');
-      _googleEvents?.add(event);
+      googleEvent = await _calendarApi.events.insert(event, 'primary');
+      _googleEvents?.add(googleEvent);
       notifyListeners();
     } catch (err) {
-      print(err.toString());
-      rethrow;
       // handle error
+      rethrow;
     }
+    return googleEvent;
   }
 
-  Future<void> updateEventToCalendar(Event event) async {
+  Future<Event?> updateEventToCalendar(Event event) async {
+    Event? googleEvent;
     try {
-      _calendarApi.events.update(event, 'primary', event.id ?? '');
+      googleEvent =
+          await _calendarApi.events.update(event, 'primary', event.id ?? '');
       _googleEvents?.forEach((element) {
-        if (element.id == event.id) {
-          element = event;
+        if (element.id == event.id && googleEvent != null) {
+          element = googleEvent;
         }
       });
       notifyListeners();
     } catch (err) {
-      print(err.toString());
-      rethrow;
       // handle error
+      rethrow;
     }
+    return googleEvent;
   }
 
-  Future<void> deleteEventFromCalendar(Event event) async {
+  Future<bool> deleteEventFromCalendar(Event event) async {
+    bool isSuccess;
     try {
       _calendarApi.events.delete('primary', event.id ?? '');
       _googleEvents?.removeWhere((element) => element.id == event.id);
       notifyListeners();
+      isSuccess = true;
     } catch (err) {
-      rethrow;
       // handle error
+      rethrow;
     }
+    return isSuccess;
   }
 }

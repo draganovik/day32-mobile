@@ -1,4 +1,4 @@
-package com.example.day32
+package com.draganovik.day32
 
 import io.flutter.embedding.android.FlutterActivity
 

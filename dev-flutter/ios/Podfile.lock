@@ -9,12 +9,19 @@ PODS:
     - FirebaseAuth (~> 8.10.0)
   - Firebase/CoreOnly (8.10.0):
     - FirebaseCore (= 8.10.0)
+  - Firebase/Database (8.10.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (~> 8.10.0)
   - firebase_auth (3.3.5):
     - Firebase/Auth (= 8.10.0)
     - firebase_core
     - Flutter
   - firebase_core (1.11.0):
     - Firebase/CoreOnly (= 8.10.0)
+    - Flutter
+  - firebase_database (9.0.5):
+    - Firebase/Database (= 8.10.0)
+    - firebase_core
     - Flutter
   - FirebaseAuth (8.10.0):
     - FirebaseCore (~> 8.0)
@@ -30,6 +37,9 @@ PODS:
     - GoogleUtilities/Environment (~> 7.6)
     - GoogleUtilities/Logger (~> 7.6)
     - nanopb (~> 2.30908.0)
+  - FirebaseDatabase (8.10.0):
+    - FirebaseCore (~> 8.0)
+    - leveldb-library (~> 1.22)
   - Flutter (1.0.0)
   - google_sign_in (0.0.1):
     - Flutter
@@ -61,6 +71,7 @@ PODS:
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.7.0)
+  - leveldb-library (1.22.1)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -73,6 +84,7 @@ PODS:
 DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - Flutter (from `Flutter`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
@@ -84,11 +96,13 @@ SPEC REPOS:
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseDatabase
     - GoogleDataTransport
     - GoogleSignIn
     - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
+    - leveldb-library
     - nanopb
     - PromisesObjC
 
@@ -97,6 +111,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_database:
+    :path: ".symlinks/plugins/firebase_database/ios"
   Flutter:
     :path: Flutter
   google_sign_in:
@@ -109,9 +125,11 @@ SPEC CHECKSUMS:
   Firebase: 44213362f1dcc52555b935dc925ed35ac55f1b20
   firebase_auth: 9d959bddc3b255ddfb67cf630a5bbb6186964356
   firebase_core: 2ca2d6cc8a11693e701b37126afae4800be5dbac
+  firebase_database: 54f02e0bac6bac2d21436ac3d4c83f8f34a9f219
   FirebaseAuth: 59a2d2b933b5b79e18fb1e6ad230c6abdaa73d26
   FirebaseCore: 04186597c095da37d90ff9fd3e53bc61a1ff2440
   FirebaseCoreDiagnostics: 56fb7216d87e0e6ec2feddefa9d8a392fe8b2c18
+  FirebaseDatabase: 5f3e83b0a0d8759378fbd5d05661244d14dfbbb0
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   google_sign_in: c5cecea71f3be43282263550556e311c4cc03582
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
@@ -119,6 +137,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
+  leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
