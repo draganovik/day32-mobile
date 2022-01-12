@@ -1,4 +1,5 @@
 import 'package:day32/providers/firebase_events_provider.dart';
+import 'package:day32/widgets/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,10 +27,9 @@ class ExploreView extends StatelessWidget {
             child: Text('There are no public events'),
           );
         }
-        return Column(
-            children: fep.events
-                .map((event) => Text(event.summary ?? '(No title)'))
-                .toList());
+        return ListView(
+            padding: EdgeInsets.all(8),
+            children: fep.events.map((event) => EventCard(event)).toList());
       },
     );
   }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:day32/providers/firebase_events_provider.dart';
 import '../providers/google_events_provider.dart';
@@ -78,7 +76,7 @@ class _EditEventModalState extends State<EditEventModal> {
                     ],
                   ));
         });
-        if (googleResponseEvent != null) {
+        if (googleResponseEvent != null && _isPublic) {
           await Provider.of<FirebaseEventsProvider>(context, listen: false)
               .addEvent(googleResponseEvent);
         }
@@ -92,7 +90,7 @@ class _EditEventModalState extends State<EditEventModal> {
           final googleResponseEvent =
               await Provider.of<GoogleEventsProvider>(context, listen: false)
                   .updateEventToCalendar(_event!);
-          if (googleResponseEvent != null) {
+          if (googleResponseEvent != null && _isPublic) {
             await Provider.of<FirebaseEventsProvider>(context, listen: false)
                 .updateEvent(googleResponseEvent);
           }
@@ -105,7 +103,10 @@ class _EditEventModalState extends State<EditEventModal> {
     }
   }
 
-  Future<void> _deleteEvent(BuildContext ctx) async {
+  Future<bool> _deleteEvent() async {
+    setState(() {
+      _isLoading = true;
+    });
     final String? eventId = _event!.id;
     final googleDeleted =
         await Provider.of<GoogleEventsProvider>(context, listen: false)
@@ -117,10 +118,11 @@ class _EditEventModalState extends State<EditEventModal> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.of(context).pop('deleted');
+    return googleDeleted;
   }
 
-  Future<String?> _showDeleteEventDialog() async {
+  Future<bool> _showDeleteEventDialog() async {
+    bool confirm = false;
     if (_event!.id != null) {
       await showDialog<void>(
           context: context,
@@ -133,8 +135,10 @@ class _EditEventModalState extends State<EditEventModal> {
                       onPressed: () => Navigator.of(ctx).pop(),
                       child: const Text('DON\'T DELETE')),
                   TextButton(
-                    onPressed: () => _deleteEvent(context)
-                        .then((value) => Navigator.of(context).pop('deleted')),
+                    onPressed: () {
+                      confirm = true;
+                      Navigator.of(context).pop();
+                    },
                     child: const Text('DELETE EVENT'),
                     style: TextButton.styleFrom(
                         primary: Theme.of(context).colorScheme.error),
@@ -142,6 +146,7 @@ class _EditEventModalState extends State<EditEventModal> {
                 ],
               ));
     }
+    return confirm;
   }
 
   void _switchAllDay() {
@@ -234,8 +239,6 @@ class _EditEventModalState extends State<EditEventModal> {
                                 _isAllDay = !_isAllDay;
                                 _switchAllDay();
                               });
-
-                              // TODO: Implement All day events
                             },
                             title: const Text('All day event'),
                           ),
@@ -272,9 +275,13 @@ class _EditEventModalState extends State<EditEventModal> {
                                 const EdgeInsets.only(left: 10, right: 0),
                             value: _isPublic,
                             onChanged: (status) {
-                              _isPublic = status ?? false;
+                              setState(() {
+                                _isPublic = !_isPublic;
+                              });
                             },
-                            title: const Text('Share event to public calendar'),
+                            title: Text(_isMoodify
+                                ? 'Share changes to public calendar'
+                                : 'Share event to public calendar'),
                           ),
                           TextFormField(
                             initialValue: _event?.description,
@@ -331,7 +338,16 @@ class _EditEventModalState extends State<EditEventModal> {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   ElevatedButton(
-                                    onPressed: () => _showDeleteEventDialog(),
+                                    onPressed: _isLoading
+                                        ? null
+                                        : () => _showDeleteEventDialog()
+                                                .then((isConfirmed) {
+                                              if (isConfirmed) {
+                                                _deleteEvent().then((value) =>
+                                                    Navigator.of(context)
+                                                        .pop('deleted'));
+                                              }
+                                            }),
                                     child: const Text(
                                       'DELETE EVENT',
                                       style: TextStyle(fontSize: 16),
@@ -383,9 +399,11 @@ class _EditEventModalState extends State<EditEventModal> {
                     'CANCEL',
                   )),
               TextButton(
-                  onPressed: () {
-                    _saveForm();
-                  },
+                  onPressed: _isLoading
+                      ? null
+                      : () {
+                          _saveForm();
+                        },
                   style: TextButton.styleFrom(
                     textStyle: Theme.of(context)
                         .textTheme

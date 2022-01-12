@@ -9,16 +9,16 @@ class GoogleEventsProvider with ChangeNotifier {
     if (googleAuthClient != null) {
       _calendarApi = CalendarApi(googleAuthClient);
       if (googleAuthClient != null) {
-        loadEvents();
+        //loadEvents();
       }
     }
   }
 
   Future<void> loadEvents() async {
-    var events =
-        await _calendarApi.events.list('primary', timeMin: DateTime.now());
+    var events = await _calendarApi.events.list('primary',
+        timeMin: DateTime.now().subtract(const Duration(days: 31)));
     _googleEvents = events.items;
-    notifyListeners();
+    //notifyListeners();
   }
 
   List<Event> get events {

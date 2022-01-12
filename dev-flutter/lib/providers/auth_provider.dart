@@ -16,12 +16,14 @@ class AuthProvider with ChangeNotifier {
   OAuthCredential? _googleCredential;
   AuthClient? _googleAuthClient;
   bool _isSignedIn = false;
+  bool isLoading = false;
 
   AuthProvider() {
     _googleSignInSilently();
   }
 
   Future<void> _firebaseGoogleAuth() async {
+    isLoading = true;
     _googleAuthClient = (await _googleSignIn.authenticatedClient())!;
     // Obtain the _auth details from the request.
     final GoogleSignInAuthentication googleAuth =
@@ -34,8 +36,10 @@ class AuthProvider with ChangeNotifier {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
         _isSignedIn = false;
+        isLoading = false;
       } else {
         _isSignedIn = true;
+        isLoading = false;
       }
       notifyListeners();
     });

@@ -41,11 +41,13 @@ class Application extends StatelessWidget {
         title: 'Day32',
         theme: ThemeData(primarySwatch: Colors.teal),
         home: Consumer<AuthProvider>(builder: (context, auth, child) {
+          if (auth.isLoading) {
+            return const SplashPage();
+          }
           if (auth.isSignedIn) {
             return const TabsPage();
-          } else {
-            return SignInPage();
           }
+          return SignInPage();
         }),
         routes: {
           '/home': (context) => const TabsPage(),

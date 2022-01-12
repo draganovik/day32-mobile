@@ -11,7 +11,7 @@ class ProfileView extends StatelessWidget {
     var authProvider = Provider.of<AuthProvider>(context);
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(8),
         child: Wrap(
           runSpacing: 4,
           children: [
