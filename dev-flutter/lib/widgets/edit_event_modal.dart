@@ -287,7 +287,6 @@ class _EditEventModalState extends State<EditEventModal> {
                             initialValue: _event?.description,
                             maxLines: 3,
                             minLines: 3,
-                            maxLength: 300,
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.multiline,
                             decoration:

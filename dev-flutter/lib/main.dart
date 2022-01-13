@@ -39,7 +39,7 @@ class Application extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Day32',
-        theme: ThemeData(primarySwatch: Colors.teal),
+        theme: ThemeData(primarySwatch: Colors.deepPurple),
         home: Consumer<AuthProvider>(builder: (context, auth, child) {
           if (auth.isLoading) {
             return const SplashPage();

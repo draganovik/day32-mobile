@@ -9,14 +9,69 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Consumer<AuthProvider>(
-          builder: (BuildContext context, auth, Widget? child) {
-            return ElevatedButton(
-              child: const Text('Google Sign In'),
-              onPressed: () => auth.googleSignIn(),
-            );
-          },
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 28),
+        child: Column(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'A nice day to remember us by...',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 80),
+                  Image.asset(
+                    'assets/schedule.png',
+                    width: MediaQuery.of(context).size.width * 0.7,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Consumer<AuthProvider>(
+                      builder: (BuildContext context, auth, Widget? child) {
+                    return ElevatedButton(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/google_logo.png', height: 24),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          const Text('Sign in with Google')
+                        ],
+                      ),
+                      onPressed: () => auth.googleSignIn(),
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8)),
+                              side: BorderSide(
+                                  color: Colors.grey[350] ?? Colors.grey)),
+                          primary: Colors.white,
+                          onPrimary: Colors.black54,
+                          textStyle: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                          padding: const EdgeInsets.all(16)),
+                    );
+                  })
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
