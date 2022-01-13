@@ -106,15 +106,6 @@ class _TabsPageState extends State<TabsPage> {
       builder: (ctx) {
         return EditEventModal(editEvent: event);
       },
-    ).then((value) {
-      if (value != null) {
-        Future.delayed(const Duration(seconds: 1), () {
-          setState(() {
-            Provider.of<GoogleEventsProvider>(context, listen: false)
-                .loadEvents();
-          });
-        });
-      }
-    });
+    );
   }
 }

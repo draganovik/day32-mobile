@@ -35,6 +35,13 @@ class AppSettingsProvider with ChangeNotifier {
     await prefs.setString(settingStore, _appData);
   }
 
+  Future<void> clearCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    _tabViewSelectedPage = 1;
+    notifyListeners();
+  }
+
   int get tabViewSelectedPage {
     return _tabViewSelectedPage;
   }

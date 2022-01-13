@@ -61,8 +61,8 @@ class GoogleEventsProvider with ChangeNotifier {
     try {
       _calendarApi.events.delete('primary', event.id ?? '');
       _googleEvents?.removeWhere((element) => element.id == event.id);
-      notifyListeners();
       isSuccess = true;
+      notifyListeners();
     } catch (err) {
       // handle error
       rethrow;

@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:day32/providers/firebase_events_provider.dart';
+import '../providers/firebase_events_provider.dart';
 
 import '../providers/app_settings_provider.dart';
 import '../providers/auth_provider.dart';
@@ -52,17 +52,19 @@ class Application extends StatelessWidget {
           brightness: Brightness.dark,
           backgroundColor: const Color(0xFF212121),
           accentColor: Colors.white,
-          dividerColor: Colors.black12,
+          dividerColor: Colors.white38,
         ),
         themeMode: ThemeMode.system,
         home: Consumer<AuthProvider>(builder: (context, auth, child) {
-          if (auth.isLoading) {
-            return const SplashPage();
+          switch (auth.status) {
+            case AuthState.registrated:
+              return const TabsPage();
+            case AuthState.unregistrated:
+            case AuthState.error:
+              return SignInPage();
+            default:
+              return const SplashPage();
           }
-          if (auth.isSignedIn) {
-            return const TabsPage();
-          }
-          return SignInPage();
         }),
         routes: {
           '/home': (context) => const TabsPage(),

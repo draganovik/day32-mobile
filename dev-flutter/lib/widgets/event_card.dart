@@ -1,4 +1,4 @@
-import 'package:day32/models/EventDataSource.dart';
+import '../models/event_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 

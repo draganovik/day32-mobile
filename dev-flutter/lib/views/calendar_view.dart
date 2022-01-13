@@ -3,7 +3,7 @@ import '../providers/google_events_provider.dart';
 import '../widgets/edit_event_modal.dart';
 import 'package:provider/provider.dart';
 
-import '../models/EventDataSource.dart';
+import '../models/event_data_source.dart';
 import '../providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
@@ -21,7 +21,7 @@ class CalendarView extends StatelessWidget {
     return FutureBuilder(
         future: gep.loadEvents(),
         builder: (context, snapshot) {
-          if (auth.isSignedIn &&
+          if (auth.status == AuthState.registrated &&
               snapshot.connectionState == ConnectionState.done) {
             return sf.SfCalendar(
               timeZone: 'Central Europe Standard Time',

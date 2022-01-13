@@ -1,3 +1,5 @@
+import 'package:day32/providers/app_settings_provider.dart';
+
 import '../providers/auth_provider.dart';
 import '../widgets/settings_list_item.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,8 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var authProvider = Provider.of<AuthProvider>(context);
+    var settingsProvider =
+        Provider.of<AppSettingsProvider>(context, listen: false);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -47,7 +51,11 @@ class ProfileView extends StatelessWidget {
             const Divider(),
             SettingsListItem(
                 title: 'Log out',
-                onTap: () => authProvider.firebaseSignOut(),
+                onTap: () {
+                  settingsProvider
+                      .clearCache()
+                      .then((_) => authProvider.firebaseSignOut());
+                },
                 colorTheme: Theme.of(context).colorScheme.error,
                 iconGraph: Icons.logout_outlined),
           ],

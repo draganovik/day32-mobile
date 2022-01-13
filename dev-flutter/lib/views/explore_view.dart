@@ -1,5 +1,5 @@
-import 'package:day32/providers/firebase_events_provider.dart';
-import 'package:day32/widgets/event_card.dart';
+import '../providers/firebase_events_provider.dart';
+import '../widgets/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

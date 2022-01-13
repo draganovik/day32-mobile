@@ -1,9 +1,9 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:day32/providers/firebase_events_provider.dart';
+import '../providers/firebase_events_provider.dart';
 import '../providers/google_events_provider.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:provider/provider.dart';
-import '../models/EventDataSource.dart';
+import '../models/event_data_source.dart';
 import 'package:flutter/material.dart';
 
 class EditEventModal extends StatefulWidget {
