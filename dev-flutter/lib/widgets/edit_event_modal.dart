@@ -303,9 +303,9 @@ class _EditEventModalState extends State<EditEventModal> {
                             children: googleEventColors.entries
                                 .map(
                                   (mapColor) => ChoiceChip(
-                                      selectedColor:
-                                          (mapColor.value.last as Color)
-                                              .withAlpha(40),
+                                      selectedColor: Theme.of(context)
+                                          .colorScheme
+                                          .background,
                                       selected: _event?.colorId == mapColor.key,
                                       onSelected: (value) {
                                         setState(() {
@@ -323,10 +323,7 @@ class _EditEventModalState extends State<EditEventModal> {
                                           Text(mapColor.value.first as String),
                                       labelStyle: Theme.of(context)
                                           .chipTheme
-                                          .labelStyle
-                                          .copyWith(
-                                              color: mapColor.value.last
-                                                  as Color)),
+                                          .labelStyle),
                                 )
                                 .toList(),
                           ),

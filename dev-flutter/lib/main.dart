@@ -22,7 +22,6 @@ void main() async {
 
 class Application extends StatelessWidget {
   const Application({Key? key}) : super(key: key);
-  // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +38,23 @@ class Application extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Day32',
-        theme: ThemeData(primarySwatch: Colors.deepPurple),
+        theme: ThemeData(
+          primarySwatch: Colors.blueGrey,
+          primaryColor: Colors.white,
+          brightness: Brightness.light,
+          backgroundColor: const Color(0xFFE5E5E5),
+          accentColor: Colors.black,
+          dividerColor: Colors.white54,
+        ),
+        darkTheme: ThemeData(
+          primarySwatch: Colors.blueGrey,
+          primaryColor: Colors.black,
+          brightness: Brightness.dark,
+          backgroundColor: const Color(0xFF212121),
+          accentColor: Colors.white,
+          dividerColor: Colors.black12,
+        ),
+        themeMode: ThemeMode.system,
         home: Consumer<AuthProvider>(builder: (context, auth, child) {
           if (auth.isLoading) {
             return const SplashPage();

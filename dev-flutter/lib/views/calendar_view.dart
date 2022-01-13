@@ -28,22 +28,18 @@ class CalendarView extends StatelessWidget {
               headerHeight: 60,
               appointmentTimeTextFormat: 'HH:ss',
               showCurrentTimeIndicator: true,
-              headerStyle: const CalendarHeaderStyle(
+              headerStyle: CalendarHeaderStyle(
                   textAlign: TextAlign.left,
                   backgroundColor: Colors.transparent,
-                  textStyle: TextStyle(
-                    color: Colors.black87,
-                  )),
-              scheduleViewSettings: const ScheduleViewSettings(
+                  textStyle: Theme.of(context).textTheme.headline6),
+              scheduleViewSettings: ScheduleViewSettings(
                   hideEmptyScheduleWeek: true,
                   appointmentItemHeight: 80,
                   monthHeaderSettings: MonthHeaderSettings(
                       height: 50,
                       textAlign: TextAlign.left,
                       backgroundColor: Colors.transparent,
-                      monthTextStyle: TextStyle(
-                        color: Colors.black87,
-                      )),
+                      monthTextStyle: Theme.of(context).textTheme.subtitle1),
                   appointmentTextStyle:
                       TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
               firstDayOfWeek: 1,

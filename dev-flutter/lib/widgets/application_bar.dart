@@ -12,7 +12,7 @@ class ApplicationBar extends StatefulWidget implements PreferredSizeWidget {
   State<ApplicationBar> createState() => _ApplicationBarState();
 
   @override
-  Size get preferredSize => AppBar().preferredSize;
+  Size get preferredSize => const Size.fromHeight(80.0);
 }
 
 class _ApplicationBarState extends State<ApplicationBar> {

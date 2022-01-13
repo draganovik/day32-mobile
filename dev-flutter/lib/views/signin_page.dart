@@ -20,10 +20,10 @@ class SignInPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'A nice day to remember us by...',
+                    'Every day, in every way, getting better and better!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.secondary,
                         fontSize: 32,
                         fontWeight: FontWeight.w600),
                   ),
