@@ -45,12 +45,22 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> googleSignIn() async {
     _googleUser = await _googleSignIn.signIn();
-    await _firebaseGoogleAuth();
+    if (_googleUser == null) {
+      status = AuthState.unregistrated;
+      notifyListeners();
+    } else {
+      await _firebaseGoogleAuth();
+    }
   }
 
   Future<void> _googleSignInSilently() async {
     _googleUser = await _googleSignIn.signInSilently();
-    await _firebaseGoogleAuth();
+    if (_googleUser == null) {
+      status = AuthState.unregistrated;
+      notifyListeners();
+    } else {
+      await _firebaseGoogleAuth();
+    }
   }
 
   Future<void> firebaseSignOut() async {

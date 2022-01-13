@@ -28,10 +28,15 @@ class GoogleEventsProvider with ChangeNotifier {
   Future<Event?> addEventToCalendar(Event event) async {
     Event? googleEvent;
     try {
+      event.id = null;
+      event.iCalUID = null;
+      event.htmlLink = null;
+      event.etag = null;
       googleEvent = await _calendarApi.events.insert(event, 'primary');
       _googleEvents?.add(googleEvent);
       notifyListeners();
     } catch (err) {
+      print(err.toString());
       // handle error
       rethrow;
     }

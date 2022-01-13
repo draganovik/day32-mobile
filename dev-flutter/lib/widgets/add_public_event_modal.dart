@@ -13,7 +13,6 @@ class AddPublicEventModal extends StatefulWidget {
 
 class _EditEventModalState extends State<AddPublicEventModal> {
   Event? _event;
-  final _form = GlobalKey<FormState>();
   bool _isLoading = false;
 
   @override
@@ -37,10 +36,9 @@ class _EditEventModalState extends State<AddPublicEventModal> {
     setState(() {
       _isLoading = true;
     });
-    final googleResponseEvent =
-        await Provider.of<GoogleEventsProvider>(context, listen: false)
-            .addEventToCalendar(_event!)
-            .catchError((error) {
+    await Provider.of<GoogleEventsProvider>(context, listen: false)
+        .addEventToCalendar(_event!)
+        .catchError((error) {
       showDialog<void>(
           context: context,
           builder: (ctx) => AlertDialog(
