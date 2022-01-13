@@ -6,7 +6,8 @@ import 'package:intl/intl.dart' as intl;
 class EventCard extends StatelessWidget {
   cal.Event event;
   Color themeColor = Colors.blue;
-  EventCard(this.event, {Key? key}) : super(key: key) {
+  void Function(BuildContext context, cal.Event event) onTap;
+  EventCard(this.event, this.onTap, {Key? key}) : super(key: key) {
     if (googleEventColors[event.colorId]?.last != null) {
       themeColor = (googleEventColors[event.colorId]?.last as Color);
     }
@@ -21,7 +22,9 @@ class EventCard extends StatelessWidget {
       child: InkWell(
         splashColor: Theme.of(context).colorScheme.surface.withAlpha(20),
         highlightColor: Theme.of(context).colorScheme.surface.withAlpha(10),
-        onTap: () {},
+        onTap: () {
+          onTap(context, event);
+        },
         child: ListTile(
           contentPadding: const EdgeInsets.all(12),
           tileColor: themeColor,
