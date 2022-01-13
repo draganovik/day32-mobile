@@ -2,6 +2,7 @@ import '../providers/google_events_provider.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 
 class AddPublicEventModal extends StatefulWidget {
   AddPublicEventModal({Key? key, this.event}) : super(key: key);
@@ -65,21 +66,56 @@ class _EditEventModalState extends State<AddPublicEventModal> {
         Expanded(
           child: Padding(
             padding: EdgeInsets.only(
-                top: MediaQuery.of(context).viewInsets.top + 10,
+                top: MediaQuery.of(context).viewInsets.top + 30,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 40,
                 left: 20,
                 right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
-                  child: Text(
-                    'Add event to personal calendar:',
-                    style: Theme.of(context).textTheme.headline4,
+            child: SingleChildScrollView(
+              child: Wrap(
+                runSpacing: 16,
+                children: [
+                  Text(
+                    (_event?.summary?.length ?? 0) < 100
+                        ? _event?.summary ?? '(No title)'
+                        : (_event?.summary?.substring(0, 40) ?? '') + '...',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontSize: 30),
+                    textAlign: TextAlign.left,
                   ),
-                ),
-              ],
+                  Row(
+                    children: [
+                      Text(
+                        _event?.start?.date == null
+                            ? '${intl.DateFormat('HH:mm').format(_event?.start?.dateTime?.toLocal() ?? DateTime.now())} - ${intl.DateFormat('HH:mm').format(_event?.end?.dateTime?.toLocal() ?? DateTime.now())}'
+                            : 'All day event',
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        _event?.start?.date == null
+                            ? intl.DateFormat('dd.MM.yyyy.').format(
+                                _event?.start?.dateTime?.toLocal() ??
+                                    DateTime.now())
+                            : 'All day event',
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    _event?.location ?? 'No location set',
+                    style: Theme.of(context).textTheme.caption?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                  const SizedBox(height: 0, width: double.infinity),
+                  Text(_event?.description ??
+                      'No description is provided for this event...'),
+                ],
+              ),
             ),
           ),
         ),
@@ -94,24 +130,8 @@ class _EditEventModalState extends State<AddPublicEventModal> {
           padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewPadding.bottom, top: 10),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: TextButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.error,
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .button
-                        ?.copyWith(fontSize: 18),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                  ),
-                  child: const Text(
-                    'CANCEL',
-                  )),
               TextButton(
                   onPressed: _isLoading
                       ? null
@@ -126,7 +146,7 @@ class _EditEventModalState extends State<AddPublicEventModal> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 12),
                   ),
-                  child: Text('ADD EVENT'))
+                  child: Text('ADD TO CALENDAR'))
             ],
           ),
         ),
