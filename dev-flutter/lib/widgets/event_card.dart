@@ -1,6 +1,7 @@
 import '../models/event_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
+import 'package:intl/intl.dart' as intl;
 
 class EventCard extends StatelessWidget {
   cal.Event event;
@@ -26,25 +27,41 @@ class EventCard extends StatelessWidget {
           tileColor: themeColor,
           textColor: Theme.of(context).colorScheme.onBackground,
           leading: CircleAvatar(
+              child: FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(intl.DateFormat('dd. MMM').format(
+                      event.start?.dateTime ??
+                          event.start?.date ??
+                          DateTime.now())),
+                ),
+              ),
               radius: 30,
+              foregroundColor: themeColor,
               backgroundColor:
-                  Theme.of(context).colorScheme.surface.withAlpha(140)),
+                  Theme.of(context).colorScheme.background.withAlpha(220)),
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 1),
             child: Text(
-              event.summary ?? '(No title)',
+              (event.summary ?? '(No title)').length > 160
+                  ? (event.summary?.substring(0, 160) ?? '') + '...'
+                  : event.summary ?? '(No title)',
               style: const TextStyle(
                 fontSize: 19,
               ),
             ),
           ),
           subtitle: Text(
-            '${event.start?.dateTime ?? event.start?.date}',
+            event.start?.date == null
+                ? '${intl.DateFormat('HH:mm').format(event.start?.dateTime ?? DateTime.now())} - ${intl.DateFormat('HH:mm').format(event.end?.dateTime ?? DateTime.now())}'
+                : 'All day event',
             style: Theme.of(context).textTheme.caption?.copyWith(
                 fontSize: 14,
                 color:
                     Theme.of(context).colorScheme.onBackground.withAlpha(160)),
           ),
+          trailing: Text(intl.DateFormat('yyyy').format(
+              event.start?.dateTime ?? event.start?.date ?? DateTime.now())),
         ),
       ),
     );

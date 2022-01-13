@@ -20,7 +20,15 @@ class FirebaseEventsProvider with ChangeNotifier {
       final responseMap = json.decode(json.encode(events.snapshot.value)) ??
           <String, dynamic>{};
       responseMap.forEach((key, value) {
-        _firebaseEvents.add(Event.fromJson(value));
+        var tempEvent = Event.fromJson(value);
+        if (tempEvent.end!.dateTime != null &&
+            tempEvent.end!.dateTime!.isAfter(DateTime.now())) {
+          _firebaseEvents.add(tempEvent);
+        } else if (tempEvent.end!.date != null &&
+            tempEvent.end!.date!
+                .isAfter(DateTime.now().add(const Duration(days: 1)))) {
+          _firebaseEvents.add(tempEvent);
+        }
       });
     } catch (err) {
       rethrow;

@@ -28,8 +28,16 @@ class ExploreView extends StatelessWidget {
           );
         }
         return ListView(
-            padding: EdgeInsets.all(8),
-            children: fep.events.map((event) => EventCard(event)).toList());
+            padding: const EdgeInsets.all(8),
+            children: fep.events.map((event) => EventCard(event)).toList()
+              ..sort((evc1, evc2) {
+                return (evc1.event.start?.dateTime ??
+                        evc1.event.start?.date ??
+                        DateTime.now())
+                    .compareTo(evc2.event.start?.dateTime ??
+                        evc2.event.start?.date ??
+                        DateTime.now());
+              }));
       },
     );
   }
