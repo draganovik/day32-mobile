@@ -56,7 +56,7 @@ class EventCard extends StatelessWidget {
           ),
           subtitle: Text(
             event.start?.date == null
-                ? '${intl.DateFormat('HH:mm').format(event.start?.dateTime ?? DateTime.now())} - ${intl.DateFormat('HH:mm').format(event.end?.dateTime ?? DateTime.now())}'
+                ? '${intl.DateFormat('HH:mm').format(event.start?.dateTime?.toLocal() ?? DateTime.now())} - ${intl.DateFormat('HH:mm').format(event.end?.dateTime?.toLocal() ?? DateTime.now())}'
                 : 'All day event',
             style: Theme.of(context).textTheme.caption?.copyWith(
                 fontSize: 14,

@@ -9,42 +9,32 @@ class EventDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    return _getEventData(index).start?.dateTime ??
-        _getEventData(index).start?.date ??
+    return appointments![index].start?.dateTime?.toLocal() ??
+        appointments![index].start?.date?.toLocal() ??
         DateTime.now();
   }
 
   @override
   DateTime getEndTime(int index) {
-    return _getEventData(index).end?.dateTime ??
-        _getEventData(index).start?.date ??
+    return appointments![index].end?.dateTime?.toLocal() ??
+        appointments![index].start?.date?.toLocal() ??
         DateTime.now();
   }
 
   @override
   String getSubject(int index) {
-    return _getEventData(index).summary ?? '(No title)';
+    return appointments![index].summary ?? '(No title)';
   }
 
   @override
   Color getColor(int index) {
-    return (googleEventColors[_getEventData(index).colorId.toString()]?.last ??
+    return (googleEventColors[appointments![index].colorId.toString()]?.last ??
         Colors.blue) as Color;
   }
 
   @override
   bool isAllDay(int index) {
-    return _getEventData(index).start!.date != null;
-  }
-
-  cal.Event _getEventData(int index) {
-    final dynamic event = appointments![index];
-    late final cal.Event eventData;
-    if (event is cal.Event) {
-      eventData = event;
-    }
-
-    return eventData;
+    return appointments![index].start!.date != null;
   }
 }
 

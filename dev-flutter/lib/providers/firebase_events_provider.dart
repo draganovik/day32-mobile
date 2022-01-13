@@ -26,7 +26,7 @@ class FirebaseEventsProvider with ChangeNotifier {
           _firebaseEvents.add(tempEvent);
         } else if (tempEvent.end!.date != null &&
             tempEvent.end!.date!
-                .isAfter(DateTime.now().add(const Duration(days: 1)))) {
+                .isAfter(DateTime.now().subtract(const Duration(days: 1)))) {
           _firebaseEvents.add(tempEvent);
         }
       });

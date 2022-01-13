@@ -49,6 +49,7 @@ class _EditEventModalState extends State<EditEventModal> {
         _event!.end = EventDateTime(
             dateTime: DateTime.now().add(const Duration(minutes: 30)));
       }
+      _adaptChangeTime();
     }
   }
 
@@ -137,7 +138,7 @@ class _EditEventModalState extends State<EditEventModal> {
                   TextButton(
                     onPressed: () {
                       confirm = true;
-                      Navigator.of(context).pop();
+                      Navigator.of(ctx).pop();
                     },
                     child: const Text('DELETE EVENT'),
                     style: TextButton.styleFrom(
@@ -149,18 +150,21 @@ class _EditEventModalState extends State<EditEventModal> {
     return confirm;
   }
 
-  void _switchAllDay() {
+  void _adaptChangeTime() {
     if (_isAllDay) {
-      DateTime? date = _event!.start!.dateTime;
-      _event!.start!.date = DateTime(date!.year, date.month, date.day);
-      _event!.end!.date = DateTime(date.year, date.month, date.day);
+      DateTime date = _event?.start?.dateTime?.toLocal() ?? DateTime.now();
+      _event?.start?.date ??= DateTime(date.year, date.month, date.day);
+      _event?.end?.date ??= DateTime(date.year, date.month, date.day);
       _event!.start!.dateTime = null;
       _event!.end!.dateTime = null;
     } else {
-      _event!.start!.dateTime =
-          _event!.start!.date!.add(const Duration(hours: 8));
-      _event!.end!.dateTime =
-          _event!.end!.date!.add(const Duration(hours: 8, minutes: 30));
+      DateTime date = _event?.start?.dateTime?.toLocal() ??
+          DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      _event?.start?.dateTime ??= date.add(const Duration(hours: 8));
+      _event?.end?.dateTime ??= date.add(const Duration(hours: 8, minutes: 30));
+      _event!.start!.dateTime = _event!.start!.dateTime?.toLocal();
+      _event!.end!.dateTime = _event!.end!.dateTime?.toLocal();
       _event!.start!.date = null;
       _event!.end!.date = null;
     }
@@ -209,12 +213,14 @@ class _EditEventModalState extends State<EditEventModal> {
                             type: _isAllDay
                                 ? DateTimePickerType.date
                                 : DateTimePickerType.dateTime,
-                            firstDate: DateTime.now(),
-                            initialValue:
-                                _event?.start?.dateTime?.toIso8601String() ??
-                                    _event?.start?.date?.toIso8601String(),
-                            initialDate:
-                                _event?.start?.dateTime ?? _event?.start?.date,
+                            initialValue: _isAllDay
+                                ? _event?.start?.date?.toIso8601String()
+                                : _event?.start?.dateTime?.toIso8601String(),
+                            initialDate: _isAllDay
+                                ? _event?.start?.date
+                                : _event?.start?.dateTime,
+                            firstDate: DateTime.now()
+                                .subtract(const Duration(days: 730)),
                             lastDate:
                                 DateTime.now().add(const Duration(days: 730)),
                             onSaved: (value) {
@@ -237,7 +243,7 @@ class _EditEventModalState extends State<EditEventModal> {
                             onChanged: (newVal) {
                               setState(() {
                                 _isAllDay = !_isAllDay;
-                                _switchAllDay();
+                                _adaptChangeTime();
                               });
                             },
                             title: const Text('All day event'),
@@ -247,14 +253,15 @@ class _EditEventModalState extends State<EditEventModal> {
                             type: _isAllDay
                                 ? DateTimePickerType.date
                                 : DateTimePickerType.dateTime,
-                            firstDate: _event?.start?.dateTime ??
-                                _event?.start?.date ??
-                                DateTime.now(),
-                            initialValue:
-                                _event?.end?.dateTime?.toIso8601String() ??
-                                    _event?.end?.date?.toIso8601String(),
-                            initialDate:
-                                _event?.end?.dateTime ?? _event?.end?.date,
+                            initialValue: _isAllDay
+                                ? _event?.end?.date?.toIso8601String()
+                                : _event?.end?.dateTime?.toIso8601String(),
+                            initialDate: _isAllDay
+                                ? _event?.end?.date
+                                : _event?.end?.dateTime,
+                            firstDate: _isAllDay
+                                ? _event?.start?.date
+                                : _event?.start?.dateTime,
                             lastDate:
                                 DateTime.now().add(const Duration(days: 730)),
                             onSaved: (value) {

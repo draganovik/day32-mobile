@@ -1,5 +1,4 @@
 import '../providers/app_settings_provider.dart';
-import '../providers/google_events_provider.dart';
 import '../widgets/edit_event_modal.dart';
 import 'package:provider/provider.dart';
 
@@ -73,11 +72,11 @@ class _TabsPageState extends State<TabsPage> {
           BottomNavigationBarItem(
             icon: Padding(
               padding: EdgeInsets.all(4.0),
-              child: Icon(Icons.calendar_today_outlined),
+              child: Icon(Icons.today_outlined),
             ),
             activeIcon: Padding(
               padding: EdgeInsets.all(4.0),
-              child: Icon(Icons.calendar_today),
+              child: Icon(Icons.today),
             ),
             label: 'Calendar',
           ),

@@ -24,9 +24,9 @@ class CalendarView extends StatelessWidget {
           if (auth.status == AuthState.registrated &&
               snapshot.connectionState == ConnectionState.done) {
             return sf.SfCalendar(
-              timeZone: 'Central Europe Standard Time',
+              timeZone: 'Europe/Belgrade',
               headerHeight: 60,
-              appointmentTimeTextFormat: 'HH:ss',
+              appointmentTimeTextFormat: 'HH:mm',
               showCurrentTimeIndicator: true,
               headerStyle: CalendarHeaderStyle(
                   textAlign: TextAlign.left,
