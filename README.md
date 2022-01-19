@@ -66,7 +66,7 @@ Go to the project directory
 
 ```bash
   cd day32
-  cd flutter-client
+  cd dev-flutter
 ```
 
 Install dependencies
