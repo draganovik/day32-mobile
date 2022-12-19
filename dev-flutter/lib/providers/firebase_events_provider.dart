@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import 'dart:developer';
+
 class FirebaseEventsProvider with ChangeNotifier {
   final List<Event> _firebaseEvents = [];
   FirebaseDatabase database = FirebaseDatabase.instance;

@@ -9,21 +9,21 @@ class EventDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    return appointments![index].start?.dateTime?.toLocal() ??
-        appointments![index].start?.date?.toLocal() ??
+    return appointments?[index].start?.dateTime?.toLocal() ??
+        appointments?[index].start?.date?.toLocal() ??
         DateTime.now();
   }
 
   @override
   DateTime getEndTime(int index) {
-    return appointments![index].end?.dateTime?.toLocal() ??
-        appointments![index].start?.date?.toLocal() ??
+    return appointments?[index].end?.dateTime?.toLocal() ??
+        appointments?[index].start?.date?.toLocal() ??
         DateTime.now();
   }
 
   @override
   String getSubject(int index) {
-    return appointments![index].summary ?? '(No title)';
+    return appointments?[index].summary ?? '(No title)';
   }
 
   @override
@@ -34,7 +34,7 @@ class EventDataSource extends CalendarDataSource {
 
   @override
   bool isAllDay(int index) {
-    return appointments![index].start!.date != null;
+    return appointments?[index].start?.date != null;
   }
 }
 
