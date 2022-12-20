@@ -62,80 +62,68 @@ class _EditEventModalState extends State<AddPublicEventModal> {
     return Column(
       children: [
         Expanded(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: EdgeInsets.only(
                 top: MediaQuery.of(context).viewInsets.top + 30,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 40,
                 left: 20,
                 right: 20),
-            child: SingleChildScrollView(
-              child: Wrap(
-                runSpacing: 16,
-                children: [
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  (_event?.summary?.length ?? 0) < 100
+                      ? _event?.summary ?? '(No title)'
+                      : '${_event?.summary?.substring(0, 40) ?? ''}...',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      ?.copyWith(fontSize: 30),
+                  textAlign: TextAlign.left,
+                ),
+                const SizedBox(height: 4),
+                Row(children: [
                   Text(
-                    (_event?.summary?.length ?? 0) < 100
-                        ? _event?.summary ?? '(No title)'
-                        : '${_event?.summary?.substring(0, 40) ?? ''}...',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(fontSize: 30),
-                    textAlign: TextAlign.left,
+                    _event?.start?.date == null
+                        ? '${intl.DateFormat('HH:mm').format(_event?.start?.dateTime?.toLocal() ?? DateTime.now())} - ${intl.DateFormat('HH:mm').format(_event?.end?.dateTime?.toLocal() ?? DateTime.now())}'
+                        : 'All day event',
+                    style: Theme.of(context).textTheme.caption,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        _event?.start?.date == null
-                            ? '${intl.DateFormat('HH:mm').format(_event?.start?.dateTime?.toLocal() ?? DateTime.now())} - ${intl.DateFormat('HH:mm').format(_event?.end?.dateTime?.toLocal() ?? DateTime.now())}'
-                            : 'All day event',
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        _event?.start?.date == null
-                            ? intl.DateFormat('dd.MM.yyyy.').format(
-                                _event?.start?.dateTime?.toLocal() ??
-                                    DateTime.now())
-                            : 'All day event',
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                    ],
-                  ),
+                  const SizedBox(width: 10),
                   Text(
-                    _event?.location ?? 'No location set',
-                    style: Theme.of(context).textTheme.caption?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                    _event?.start?.date == null
+                        ? intl.DateFormat('dd.MM.yyyy.').format(
+                            _event?.start?.dateTime?.toLocal() ??
+                                DateTime.now())
+                        : 'All day event',
+                    style: Theme.of(context).textTheme.caption,
                   ),
-                  const SizedBox(height: 0, width: double.infinity),
-                  Text(_event?.description ??
-                      'No description is provided for this event...'),
-                ],
-              ),
+                ]),
+                const SizedBox(height: 10),
+                Text(_event?.location ?? 'No location set',
+                    style: Theme.of(context).textTheme.caption),
+                const SizedBox(height: 20),
+                Text(_event?.description ??
+                    'No description is provided for this event...'),
+              ],
             ),
           ),
         ),
         Container(
           decoration: BoxDecoration(
-              border: Border.symmetric(
-                  horizontal: BorderSide(
+              border: Border(
+                  top: BorderSide(
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withAlpha(10)))),
+                          .withAlpha(40)))),
           padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewPadding.bottom + 10, top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                  onPressed: _isLoading
-                      ? null
-                      : () {
-                          _saveForm();
-                        },
+                  onPressed: _isLoading ? null : () => _saveForm(),
                   style: TextButton.styleFrom(
                     textStyle: Theme.of(context)
                         .textTheme

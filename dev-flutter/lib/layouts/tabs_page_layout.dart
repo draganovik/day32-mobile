@@ -2,20 +2,20 @@ import '../providers/app_settings_provider.dart';
 import '../widgets/edit_event_modal.dart';
 import 'package:provider/provider.dart';
 
-import '../views/calendar_view.dart';
-import '../views/explore_view.dart';
-import '../views/profile_view.dart';
+import '../views/calendar_page.dart';
+import '../views/explore_page.dart';
+import '../views/profile_page.dart';
 import '../widgets/application_bar.dart';
 import 'package:flutter/material.dart';
 
-class TabsPage extends StatefulWidget {
-  const TabsPage({Key? key}) : super(key: key);
+class TabsPageLayout extends StatefulWidget {
+  const TabsPageLayout({Key? key}) : super(key: key);
 
   @override
-  State<TabsPage> createState() => _TabsPageState();
+  State<TabsPageLayout> createState() => _TabsPageLayoutState();
 }
 
-class _TabsPageState extends State<TabsPage> {
+class _TabsPageLayoutState extends State<TabsPageLayout> {
   late AppSettingsProvider appSettings;
   var _pages = [];
 
@@ -29,9 +29,9 @@ class _TabsPageState extends State<TabsPage> {
   void initState() {
     super.initState();
     _pages = [
-      {'title': 'Explore', 'page': const ExploreView()},
-      {'title': 'My Events', 'page': const CalendarView()},
-      {'title': 'Profile & Settings', 'page': const ProfileView()},
+      {'title': 'Explore', 'page': const ExplorePage()},
+      {'title': 'My Events', 'page': const CalendarPage()},
+      {'title': 'Profile & Settings', 'page': const ProfilePage()},
     ];
   }
 

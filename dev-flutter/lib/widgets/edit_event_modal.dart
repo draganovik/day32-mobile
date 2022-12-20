@@ -3,7 +3,7 @@ import '../providers/firebase_events_provider.dart';
 import '../providers/google_events_provider.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:provider/provider.dart';
-import '../models/event_data_source.dart';
+import '../adapters/event_data_source.dart';
 import 'package:flutter/material.dart';
 
 class EditEventModal extends StatefulWidget {

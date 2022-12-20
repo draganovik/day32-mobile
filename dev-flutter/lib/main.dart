@@ -10,7 +10,7 @@ import '../views/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../views/tabs_page.dart';
+import '../layouts/tabs_page_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +54,7 @@ class Application extends StatelessWidget {
         home: Consumer<AuthProvider>(builder: (context, auth, child) {
           switch (auth.status) {
             case AuthState.registrated:
-              return const TabsPage();
+              return const TabsPageLayout();
             case AuthState.unregistrated:
             case AuthState.error:
               return const SignInPage();
@@ -63,7 +63,7 @@ class Application extends StatelessWidget {
           }
         }),
         routes: {
-          '/home': (context) => const TabsPage(),
+          '/home': (context) => const TabsPageLayout(),
           SignInPage.routeName: (context) => const SignInPage()
         },
       ),

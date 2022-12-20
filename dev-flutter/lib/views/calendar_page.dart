@@ -3,15 +3,14 @@ import '../providers/google_events_provider.dart';
 import '../widgets/edit_event_modal.dart';
 import 'package:provider/provider.dart';
 
-import '../models/event_data_source.dart';
+import '../adapters/event_data_source.dart';
 import '../providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sf;
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class CalendarView extends StatelessWidget {
-  const CalendarView({Key? key}) : super(key: key);
+class CalendarPage extends StatelessWidget {
+  const CalendarPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +28,14 @@ class CalendarView extends StatelessWidget {
               headerHeight: 60,
               appointmentTimeTextFormat: 'HH:mm',
               showCurrentTimeIndicator: true,
-              headerStyle: CalendarHeaderStyle(
+              headerStyle: sf.CalendarHeaderStyle(
                   textAlign: TextAlign.left,
                   backgroundColor: Colors.transparent,
                   textStyle: Theme.of(context).textTheme.headline6),
-              scheduleViewSettings: ScheduleViewSettings(
+              scheduleViewSettings: sf.ScheduleViewSettings(
                   hideEmptyScheduleWeek: true,
                   appointmentItemHeight: 70,
-                  monthHeaderSettings: MonthHeaderSettings(
+                  monthHeaderSettings: sf.MonthHeaderSettings(
                       height: 50,
                       textAlign: TextAlign.left,
                       backgroundColor: Colors.transparent,
@@ -49,7 +48,7 @@ class CalendarView extends StatelessWidget {
               controller: appData.mainCalendarController,
               dataSource: EventDataSource(
                   gep.events, Theme.of(context).colorScheme.surface),
-              onTap: (CalendarTapDetails details) {
+              onTap: (sf.CalendarTapDetails details) {
                 dynamic appointments = details.appointments;
                 if (appointments != null) {
                   showEditEventModal(context, appointments[0]);
