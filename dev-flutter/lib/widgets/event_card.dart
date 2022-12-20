@@ -32,7 +32,8 @@ class EventCard extends StatelessWidget {
           leading: CircleAvatar(
               radius: 30,
               foregroundColor: themeColor,
-              backgroundColor: Theme.of(context).colorScheme.onBackground,
+              backgroundColor:
+                  Theme.of(context).colorScheme.onBackground.withAlpha(220),
               child: FittedBox(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

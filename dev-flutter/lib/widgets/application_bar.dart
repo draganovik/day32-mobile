@@ -21,6 +21,7 @@ class _ApplicationBarState extends State<ApplicationBar> {
     return AppBar(
       title: Text(widget.title),
       toolbarHeight: 80,
+      elevation: 20,
       actions: [
         PopupMenuButton(
           icon: const Icon(Icons.filter_list),

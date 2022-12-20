@@ -12,7 +12,8 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+          padding:
+              const EdgeInsets.only(top: 40, bottom: 16, left: 16, right: 16),
           constraints: const BoxConstraints(
             maxWidth: 400,
           ),
@@ -24,13 +25,14 @@ class SignInPage extends StatelessWidget {
                 'Every day, in every way, getting better and better!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.onBackground,
                     fontSize: 28,
                     fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
               Image.asset(
                 'assets/schedule.png',
+                scale: 1.6,
                 width: max(400, MediaQuery.of(context).size.shortestSide / 2),
               ),
               const SizedBox(height: 10),
@@ -50,7 +52,7 @@ class SignInPage extends StatelessWidget {
                       textStyle: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w600),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 20)),
+                          horizontal: 0, vertical: 16)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

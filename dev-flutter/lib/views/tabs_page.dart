@@ -52,6 +52,7 @@ class _TabsPageState extends State<TabsPage> {
               label: const Text("Add event"))
           : null,
       bottomNavigationBar: NavigationBar(
+        elevation: 20,
         backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
         onDestinationSelected: (int index) => _selectPage(index),
         selectedIndex: appSettings.tabViewSelectedPage,
