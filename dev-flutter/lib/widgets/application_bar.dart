@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ApplicationBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
-  ApplicationBar({Key? key, this.title = 'Day32', required context})
+  const ApplicationBar({Key? key, this.title = 'Day32', required context})
       : super(key: key);
 
   @override
@@ -20,24 +20,18 @@ class _ApplicationBarState extends State<ApplicationBar> {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(widget.title),
-      titleTextStyle:
-          Theme.of(context).textTheme.headline6!.copyWith(fontSize: 26),
       toolbarHeight: 80,
-      centerTitle: false,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      foregroundColor: Theme.of(context).colorScheme.onSurface,
-      elevation: 2,
       actions: [
         PopupMenuButton(
-          icon: Icon(Icons.filter_list),
+          icon: const Icon(Icons.filter_list),
           itemBuilder: (_) => [
             const PopupMenuItem(
-              child: Text('Schedule'),
               value: CalendarView.schedule,
+              child: Text('Schedule'),
             ),
             const PopupMenuItem(
-              child: Text('Week view'),
               value: CalendarView.week,
+              child: Text('Week view'),
             ),
           ],
           onSelected: (CalendarView value) {

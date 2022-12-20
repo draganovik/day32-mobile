@@ -51,44 +51,24 @@ class _TabsPageState extends State<TabsPage> {
               },
               label: const Text("Add event"))
           : null,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: appSettings.tabViewSelectedPage,
-        onTap: _selectPage,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        selectedFontSize: 12,
-        unselectedFontSize: 11,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Icon(Icons.explore_outlined),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Icon(Icons.explore),
-            ),
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+        onDestinationSelected: (int index) => _selectPage(index),
+        selectedIndex: appSettings.tabViewSelectedPage,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.explore_outlined),
+            selectedIcon: Icon(Icons.explore),
             label: 'Explore',
           ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Icon(Icons.today_outlined),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Icon(Icons.today),
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.today_outlined),
+            selectedIcon: Icon(Icons.today),
             label: 'Calendar',
           ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Icon(Icons.person_outline),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Icon(Icons.person),
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
             label: 'Profile',
           )
         ],

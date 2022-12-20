@@ -3,8 +3,9 @@ import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventDataSource extends CalendarDataSource {
-  EventDataSource(List<cal.Event> source) {
-    appointments = source;
+  Color defaultEventColor;
+  EventDataSource(List<cal.Event> source, this.defaultEventColor) {
+    appointments = source.where((element) => element.summary != null).toList();
   }
 
   @override
@@ -29,7 +30,7 @@ class EventDataSource extends CalendarDataSource {
   @override
   Color getColor(int index) {
     return (googleEventColors[appointments![index].colorId.toString()]?.last ??
-        Colors.blue) as Color;
+        defaultEventColor) as Color;
   }
 
   @override

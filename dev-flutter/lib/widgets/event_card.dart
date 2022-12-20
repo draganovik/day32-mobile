@@ -30,6 +30,9 @@ class EventCard extends StatelessWidget {
           tileColor: themeColor,
           textColor: Theme.of(context).colorScheme.onBackground,
           leading: CircleAvatar(
+              radius: 30,
+              foregroundColor: themeColor,
+              backgroundColor: Theme.of(context).colorScheme.onBackground,
               child: FittedBox(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -38,16 +41,12 @@ class EventCard extends StatelessWidget {
                           event.start?.date ??
                           DateTime.now())),
                 ),
-              ),
-              radius: 30,
-              foregroundColor: themeColor,
-              backgroundColor:
-                  Theme.of(context).colorScheme.background.withAlpha(220)),
+              )),
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 1),
             child: Text(
               (event.summary ?? '(No title)').length > 160
-                  ? (event.summary?.substring(0, 160) ?? '') + '...'
+                  ? '${event.summary?.substring(0, 160) ?? ''}...'
                   : event.summary ?? '(No title)',
               style: const TextStyle(
                 fontSize: 19,

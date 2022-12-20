@@ -19,23 +19,27 @@ class ProfileView extends StatelessWidget {
         child: Wrap(
           runSpacing: 4,
           children: [
-            Card(
-              elevation: 1,
-              child: ListTile(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                leading: CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: NetworkImage(
-                        authProvider.googleUser?.photoUrl ?? '',
-                        scale: 2)),
-                title: Text(
-                    authProvider.googleUser?.displayName ?? 'Unknown user'),
-                subtitle: Text(
-                    authProvider.googleUser?.email ?? 'Email not provided'),
-              ),
+            ListTile(
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimaryContainer
+                          .withAlpha(40),
+                      width: 1),
+                  borderRadius: const BorderRadius.all(Radius.circular(8))),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              leading: CircleAvatar(
+                  radius: 30.0,
+                  backgroundImage: NetworkImage(
+                      authProvider.googleUser?.photoUrl ?? '',
+                      scale: 2)),
+              title:
+                  Text(authProvider.googleUser?.displayName ?? 'Unknown user'),
+              subtitle:
+                  Text(authProvider.googleUser?.email ?? 'Email not provided'),
             ),
-            const Divider(),
             SettingsListItem(
                 title: 'My public events',
                 onTap: () {},
@@ -48,7 +52,6 @@ class ProfileView extends StatelessWidget {
                 title: 'Import events (.ical)',
                 onTap: () {},
                 iconGraph: Icons.merge_type_rounded),
-            const Divider(),
             SettingsListItem(
                 title: 'Log out',
                 onTap: () {

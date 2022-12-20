@@ -75,7 +75,7 @@ class _EditEventModalState extends State<AddPublicEventModal> {
                   Text(
                     (_event?.summary?.length ?? 0) < 100
                         ? _event?.summary ?? '(No title)'
-                        : (_event?.summary?.substring(0, 40) ?? '') + '...',
+                        : '${_event?.summary?.substring(0, 40) ?? ''}...',
                     style: Theme.of(context)
                         .textTheme
                         .headline6
@@ -126,7 +126,7 @@ class _EditEventModalState extends State<AddPublicEventModal> {
                           .onSurface
                           .withAlpha(10)))),
           padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewPadding.bottom, top: 10),
+              bottom: MediaQuery.of(context).viewPadding.bottom + 10, top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -144,7 +144,7 @@ class _EditEventModalState extends State<AddPublicEventModal> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 12),
                   ),
-                  child: Text('ADD TO CALENDAR'))
+                  child: const Text('ADD TO CALENDAR'))
             ],
           ),
         ),

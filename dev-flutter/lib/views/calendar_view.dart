@@ -24,6 +24,7 @@ class CalendarView extends StatelessWidget {
           if (auth.status == AuthState.registrated &&
               snapshot.connectionState == ConnectionState.done) {
             return sf.SfCalendar(
+              initialSelectedDate: DateTime.now(),
               timeZone: 'Europe/Belgrade',
               headerHeight: 60,
               appointmentTimeTextFormat: 'HH:mm',
@@ -34,19 +35,20 @@ class CalendarView extends StatelessWidget {
                   textStyle: Theme.of(context).textTheme.headline6),
               scheduleViewSettings: ScheduleViewSettings(
                   hideEmptyScheduleWeek: true,
-                  appointmentItemHeight: 80,
+                  appointmentItemHeight: 70,
                   monthHeaderSettings: MonthHeaderSettings(
                       height: 50,
                       textAlign: TextAlign.left,
                       backgroundColor: Colors.transparent,
                       monthTextStyle: Theme.of(context).textTheme.subtitle1),
-                  appointmentTextStyle:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  appointmentTextStyle: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500)),
               firstDayOfWeek: 1,
               view: appData.mainCalendarController.view ??
                   sf.CalendarView.schedule,
               controller: appData.mainCalendarController,
-              dataSource: EventDataSource(gep.events),
+              dataSource: EventDataSource(
+                  gep.events, Theme.of(context).colorScheme.surface),
               onTap: (CalendarTapDetails details) {
                 dynamic appointments = details.appointments;
                 if (appointments != null) {

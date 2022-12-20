@@ -5,8 +5,6 @@ import '../widgets/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter/foundation.dart';
-
 class ExploreView extends StatelessWidget {
   const ExploreView({Key? key}) : super(key: key);
 
@@ -23,7 +21,6 @@ class ExploreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var fep = Provider.of<FirebaseEventsProvider>(context);
-   debugPrint('movieTitle');
     return FutureBuilder(
       future: fep.fetchAndSetEvents(),
       builder: (context, snap) {

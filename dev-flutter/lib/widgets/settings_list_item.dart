@@ -17,14 +17,17 @@ class SettingsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(4)),
-      splashColor: colorTheme?.withAlpha(90),
-      highlightColor: colorTheme?.withAlpha(60),
+      splashColor: colorTheme?.withAlpha(190),
+      highlightColor: colorTheme?.withAlpha(160),
       child: ListTile(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(4))),
-        tileColor: colorTheme?.withAlpha(20),
-        textColor: colorTheme ?? Theme.of(context).textTheme.bodyText1?.color,
-        iconColor: colorTheme ?? Theme.of(context).textTheme.bodyText1?.color,
+        shape: RoundedRectangleBorder(
+            side: colorTheme != null
+                ? BorderSide(color: colorTheme!.withAlpha(140), width: 1.4)
+                : BorderSide.none,
+            borderRadius: const BorderRadius.all(Radius.circular(4))),
+        tileColor: colorTheme?.withAlpha(40),
+        textColor: colorTheme ?? Theme.of(context).colorScheme.onBackground,
+        iconColor: colorTheme ?? Theme.of(context).colorScheme.onBackground,
         title: Text(title),
         leading: Icon(iconGraph),
       ),

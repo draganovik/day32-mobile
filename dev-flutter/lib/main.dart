@@ -39,21 +39,17 @@ class Application extends StatelessWidget {
       child: MaterialApp(
         title: 'Day32',
         theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
-          primaryColor: Colors.white,
-          brightness: Brightness.light,
-          backgroundColor: const Color(0xFFE5E5E5),
-          accentColor: Colors.black,
-          dividerColor: Colors.white54,
-        ),
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSwatch(
+                primarySwatch: Colors.deepPurple,
+                accentColor: Colors.deepPurpleAccent,
+                brightness: Brightness.light)),
         darkTheme: ThemeData(
-          primarySwatch: Colors.blueGrey,
-          primaryColor: Colors.black,
-          brightness: Brightness.dark,
-          backgroundColor: const Color(0xFF212121),
-          accentColor: Colors.white,
-          dividerColor: Colors.white38,
-        ),
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSwatch(
+                primarySwatch: Colors.deepPurple,
+                accentColor: Colors.deepPurpleAccent,
+                brightness: Brightness.dark)),
         themeMode: ThemeMode.system,
         home: Consumer<AuthProvider>(builder: (context, auth, child) {
           switch (auth.status) {
@@ -61,14 +57,14 @@ class Application extends StatelessWidget {
               return const TabsPage();
             case AuthState.unregistrated:
             case AuthState.error:
-              return SignInPage();
+              return const SignInPage();
             default:
               return const SplashPage();
           }
         }),
         routes: {
           '/home': (context) => const TabsPage(),
-          SignInPage.routeName: (context) => SignInPage()
+          SignInPage.routeName: (context) => const SignInPage()
         },
       ),
     );
