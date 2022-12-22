@@ -8,7 +8,7 @@ Day32 is a calendar Flutter client, with line sync with Google Calendar and publ
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[GPL-3.0](https://github.com/draganovik/Day32/blob/25a9e21f6ba9ccc0b6b5e8db338188cc88847ed2/LICENSE)
 
 
 ## Features
