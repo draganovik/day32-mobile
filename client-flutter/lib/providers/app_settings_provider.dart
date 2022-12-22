@@ -18,21 +18,21 @@ class AppSettingsProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey(settingStore)) return;
 
-    final _appData = json.decode(prefs.getString(settingStore) ?? '');
-    _tabViewSelectedPage = _appData['tab_view_selected_index'];
+    final appData = json.decode(prefs.getString(settingStore) ?? '');
+    _tabViewSelectedPage = appData['tab_view_selected_index'];
     _mainCalendarController.view =
-        CalendarView.values[_appData['main_calendar_view']];
+        CalendarView.values[appData['main_calendar_view']];
     hasLoaded = true;
     notifyListeners();
   }
 
   Future<void> _cacheAppData() async {
     final prefs = await SharedPreferences.getInstance();
-    final _appData = json.encode({
+    final appData = json.encode({
       'tab_view_selected_index': _tabViewSelectedPage,
       'main_calendar_view': _mainCalendarController.view!.index
     });
-    await prefs.setString(settingStore, _appData);
+    await prefs.setString(settingStore, appData);
   }
 
   Future<void> clearCache() async {

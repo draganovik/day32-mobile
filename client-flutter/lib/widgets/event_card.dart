@@ -4,17 +4,15 @@ import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:intl/intl.dart' as intl;
 
 class EventCard extends StatelessWidget {
-  cal.Event event;
-  Color themeColor = Colors.blue;
-  void Function(BuildContext context, cal.Event event) onTap;
-  EventCard(this.event, this.onTap, {Key? key}) : super(key: key) {
-    if (googleEventColors[event.colorId]?.last != null) {
-      themeColor = (googleEventColors[event.colorId]?.last as Color);
-    }
-  }
+  final cal.Event event;
+  final void Function(BuildContext context, cal.Event event) onTap;
+  const EventCard(this.event, this.onTap, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color themeColor = event.colorId == null
+        ? Theme.of(context).colorScheme.surface
+        : (googleEventColors[event.colorId]?.last) as Color;
     return Card(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12))),

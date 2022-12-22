@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 class EventDataSource extends CalendarDataSource {
   Color defaultEventColor;
   EventDataSource(List<cal.Event> source, this.defaultEventColor) {
-    appointments = source.where((element) => element.summary != null).toList();
+    appointments = source.where((element) => element.start != null).toList();
   }
 
   @override

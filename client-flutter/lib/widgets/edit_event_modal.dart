@@ -7,10 +7,10 @@ import '../adapters/event_data_source.dart';
 import 'package:flutter/material.dart';
 
 class EditEventModal extends StatefulWidget {
-  EditEventModal({Key? key, this.editEvent}) : super(key: key);
-  Event? editEvent;
+  const EditEventModal({Key? key, this.editEvent}) : super(key: key);
+  final Event? editEvent;
   @override
-  _EditEventModalState createState() => _EditEventModalState();
+  State<EditEventModal> createState() => _EditEventModalState();
 }
 
 class _EditEventModalState extends State<EditEventModal> {
@@ -59,12 +59,15 @@ class _EditEventModalState extends State<EditEventModal> {
       setState(() {
         _isLoading = true;
       });
+      final googleEventsProvider =
+          Provider.of<GoogleEventsProvider>(context, listen: false);
+      final firebaseEventsProvider =
+          Provider.of<FirebaseEventsProvider>(context, listen: false);
       _form.currentState?.save();
       if (!_isMoodify) {
-        final googleResponseEvent =
-            await Provider.of<GoogleEventsProvider>(context, listen: false)
-                .addEventToCalendar(_event!)
-                .catchError((error) {
+        final googleResponseEvent = await googleEventsProvider
+            .addEventToCalendar(_event!)
+            .catchError((error) {
           showDialog<void>(
               context: context,
               builder: (ctx) => AlertDialog(
@@ -78,8 +81,7 @@ class _EditEventModalState extends State<EditEventModal> {
                   ));
         });
         if (googleResponseEvent != null && _isPublic) {
-          await Provider.of<FirebaseEventsProvider>(context, listen: false)
-              .addEvent(googleResponseEvent);
+          await firebaseEventsProvider.addEvent(googleResponseEvent);
         }
 
         setState(() {
@@ -89,11 +91,9 @@ class _EditEventModalState extends State<EditEventModal> {
       } else {
         if (_event?.id != '') {
           final googleResponseEvent =
-              await Provider.of<GoogleEventsProvider>(context, listen: false)
-                  .updateEventToCalendar(_event!);
+              await googleEventsProvider.updateEventToCalendar(_event!);
           if (googleResponseEvent != null && _isPublic) {
-            await Provider.of<FirebaseEventsProvider>(context, listen: false)
-                .updateEvent(googleResponseEvent);
+            await firebaseEventsProvider.updateEvent(googleResponseEvent);
           }
           setState(() {
             _isLoading = false;
@@ -108,13 +108,15 @@ class _EditEventModalState extends State<EditEventModal> {
     setState(() {
       _isLoading = true;
     });
+    final googleEventsProvider =
+        Provider.of<GoogleEventsProvider>(context, listen: false);
+    final firebaseEventsProvider =
+        Provider.of<FirebaseEventsProvider>(context, listen: false);
     final String? eventId = _event!.id;
     final googleDeleted =
-        await Provider.of<GoogleEventsProvider>(context, listen: false)
-            .deleteEventFromCalendar(_event!);
+        await googleEventsProvider.deleteEventFromCalendar(_event!);
     if (googleDeleted && eventId != null) {
-      await Provider.of<FirebaseEventsProvider>(context, listen: false)
-          .deleteEventById(eventId);
+      await firebaseEventsProvider.deleteEventById(eventId);
     }
     setState(() {
       _isLoading = false;
