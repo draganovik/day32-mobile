@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
 class AddPublicEventModal extends StatefulWidget {
-  AddPublicEventModal({Key? key, this.event}) : super(key: key);
-  Event? event;
+  const AddPublicEventModal({Key? key, this.event}) : super(key: key);
+  final Event? event;
   @override
-  _EditEventModalState createState() => _EditEventModalState();
+  State<AddPublicEventModal> createState() => _EditEventModalState();
 }
 
 class _EditEventModalState extends State<AddPublicEventModal> {
@@ -53,8 +53,8 @@ class _EditEventModalState extends State<AddPublicEventModal> {
     });
     setState(() {
       _isLoading = false;
+      Navigator.of(context).pop('added');
     });
-    Navigator.of(context).pop('added');
   }
 
   @override

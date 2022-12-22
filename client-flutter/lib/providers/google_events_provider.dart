@@ -36,7 +36,6 @@ class GoogleEventsProvider with ChangeNotifier {
       _googleEvents?.add(googleEvent);
       notifyListeners();
     } catch (err) {
-      print(err.toString());
       // handle error
       rethrow;
     }
