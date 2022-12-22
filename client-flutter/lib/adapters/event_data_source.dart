@@ -3,38 +3,39 @@ import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventDataSource extends CalendarDataSource {
-  EventDataSource(List<cal.Event> source) {
-    appointments = source;
+  Color defaultEventColor;
+  EventDataSource(List<cal.Event> source, this.defaultEventColor) {
+    appointments = source.where((element) => element.summary != null).toList();
   }
 
   @override
   DateTime getStartTime(int index) {
-    return appointments![index].start?.dateTime?.toLocal() ??
-        appointments![index].start?.date?.toLocal() ??
+    return appointments?[index].start?.dateTime?.toLocal() ??
+        appointments?[index].start?.date?.toLocal() ??
         DateTime.now();
   }
 
   @override
   DateTime getEndTime(int index) {
-    return appointments![index].end?.dateTime?.toLocal() ??
-        appointments![index].start?.date?.toLocal() ??
+    return appointments?[index].end?.dateTime?.toLocal() ??
+        appointments?[index].start?.date?.toLocal() ??
         DateTime.now();
   }
 
   @override
   String getSubject(int index) {
-    return appointments![index].summary ?? '(No title)';
+    return appointments?[index].summary ?? '(No title)';
   }
 
   @override
   Color getColor(int index) {
     return (googleEventColors[appointments![index].colorId.toString()]?.last ??
-        Colors.blue) as Color;
+        defaultEventColor) as Color;
   }
 
   @override
   bool isAllDay(int index) {
-    return appointments![index].start!.date != null;
+    return appointments?[index].start?.date != null;
   }
 }
 

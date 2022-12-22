@@ -1,4 +1,4 @@
-import '../models/event_data_source.dart';
+import '../adapters/event_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:intl/intl.dart' as intl;
@@ -30,6 +30,10 @@ class EventCard extends StatelessWidget {
           tileColor: themeColor,
           textColor: Theme.of(context).colorScheme.onBackground,
           leading: CircleAvatar(
+              radius: 30,
+              foregroundColor: themeColor,
+              backgroundColor:
+                  Theme.of(context).colorScheme.onBackground.withAlpha(220),
               child: FittedBox(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -38,16 +42,12 @@ class EventCard extends StatelessWidget {
                           event.start?.date ??
                           DateTime.now())),
                 ),
-              ),
-              radius: 30,
-              foregroundColor: themeColor,
-              backgroundColor:
-                  Theme.of(context).colorScheme.background.withAlpha(220)),
+              )),
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 1),
             child: Text(
               (event.summary ?? '(No title)').length > 160
-                  ? (event.summary?.substring(0, 160) ?? '') + '...'
+                  ? '${event.summary?.substring(0, 160) ?? ''}...'
                   : event.summary ?? '(No title)',
               style: const TextStyle(
                 fontSize: 19,

@@ -3,7 +3,7 @@ import '../providers/firebase_events_provider.dart';
 import '../providers/google_events_provider.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:provider/provider.dart';
-import '../models/event_data_source.dart';
+import '../adapters/event_data_source.dart';
 import 'package:flutter/material.dart';
 
 class EditEventModal extends StatefulWidget {
@@ -84,8 +84,8 @@ class _EditEventModalState extends State<EditEventModal> {
 
         setState(() {
           _isLoading = false;
+          Navigator.of(context).pop('added');
         });
-        Navigator.of(context).pop('added');
       } else {
         if (_event?.id != '') {
           final googleResponseEvent =
@@ -97,8 +97,8 @@ class _EditEventModalState extends State<EditEventModal> {
           }
           setState(() {
             _isLoading = false;
+            Navigator.of(context).pop('eddited');
           });
-          Navigator.of(context).pop('eddited');
         }
       }
     }
@@ -140,9 +140,9 @@ class _EditEventModalState extends State<EditEventModal> {
                       confirm = true;
                       Navigator.of(ctx).pop();
                     },
-                    child: const Text('DELETE EVENT'),
                     style: TextButton.styleFrom(
-                        primary: Theme.of(context).colorScheme.error),
+                        foregroundColor: Theme.of(context).colorScheme.error),
+                    child: const Text('DELETE EVENT'),
                   )
                 ],
               ));
@@ -310,27 +310,20 @@ class _EditEventModalState extends State<EditEventModal> {
                             children: googleEventColors.entries
                                 .map(
                                   (mapColor) => ChoiceChip(
-                                      selectedColor: Theme.of(context)
-                                          .colorScheme
-                                          .background,
+                                      selectedColor:
+                                          mapColor.value.last as Color,
                                       selected: _event?.colorId == mapColor.key,
                                       onSelected: (value) {
                                         setState(() {
                                           _event?.colorId = mapColor.key;
                                         });
                                       },
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.surface,
-                                      elevation: 2,
                                       avatar: CircleAvatar(
                                         backgroundColor:
                                             mapColor.value.last as Color,
                                       ),
                                       label:
-                                          Text(mapColor.value.first as String),
-                                      labelStyle: Theme.of(context)
-                                          .chipTheme
-                                          .labelStyle),
+                                          Text(mapColor.value.first as String)),
                                 )
                                 .toList(),
                           ),
@@ -351,16 +344,19 @@ class _EditEventModalState extends State<EditEventModal> {
                                                         .pop('deleted'));
                                               }
                                             }),
+                                    style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 16),
+                                        foregroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .onErrorContainer,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .error),
                                     child: const Text(
                                       'DELETE EVENT',
                                       style: TextStyle(fontSize: 16),
                                     ),
-                                    style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 16),
-                                        primary: Theme.of(context)
-                                            .colorScheme
-                                            .error),
                                   ),
                                 ],
                               ),
@@ -381,7 +377,7 @@ class _EditEventModalState extends State<EditEventModal> {
                           .onSurface
                           .withAlpha(10)))),
           padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewPadding.bottom, top: 10),
+              bottom: MediaQuery.of(context).viewPadding.bottom + 10, top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -390,7 +386,7 @@ class _EditEventModalState extends State<EditEventModal> {
                     Navigator.of(context).pop();
                   },
                   style: TextButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.error,
+                    foregroundColor: Theme.of(context).colorScheme.error,
                     textStyle: Theme.of(context)
                         .textTheme
                         .button

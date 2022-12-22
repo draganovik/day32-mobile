@@ -3,15 +3,14 @@ import '../providers/google_events_provider.dart';
 import '../widgets/edit_event_modal.dart';
 import 'package:provider/provider.dart';
 
-import '../models/event_data_source.dart';
+import '../adapters/event_data_source.dart';
 import '../providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sf;
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class CalendarView extends StatelessWidget {
-  const CalendarView({Key? key}) : super(key: key);
+class CalendarPage extends StatelessWidget {
+  const CalendarPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,30 +23,32 @@ class CalendarView extends StatelessWidget {
           if (auth.status == AuthState.registrated &&
               snapshot.connectionState == ConnectionState.done) {
             return sf.SfCalendar(
+              initialSelectedDate: DateTime.now(),
               timeZone: 'Europe/Belgrade',
               headerHeight: 60,
               appointmentTimeTextFormat: 'HH:mm',
               showCurrentTimeIndicator: true,
-              headerStyle: CalendarHeaderStyle(
+              headerStyle: sf.CalendarHeaderStyle(
                   textAlign: TextAlign.left,
                   backgroundColor: Colors.transparent,
                   textStyle: Theme.of(context).textTheme.headline6),
-              scheduleViewSettings: ScheduleViewSettings(
+              scheduleViewSettings: sf.ScheduleViewSettings(
                   hideEmptyScheduleWeek: true,
-                  appointmentItemHeight: 80,
-                  monthHeaderSettings: MonthHeaderSettings(
+                  appointmentItemHeight: 70,
+                  monthHeaderSettings: sf.MonthHeaderSettings(
                       height: 50,
                       textAlign: TextAlign.left,
                       backgroundColor: Colors.transparent,
                       monthTextStyle: Theme.of(context).textTheme.subtitle1),
-                  appointmentTextStyle:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  appointmentTextStyle: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500)),
               firstDayOfWeek: 1,
               view: appData.mainCalendarController.view ??
                   sf.CalendarView.schedule,
               controller: appData.mainCalendarController,
-              dataSource: EventDataSource(gep.events),
-              onTap: (CalendarTapDetails details) {
+              dataSource: EventDataSource(
+                  gep.events, Theme.of(context).colorScheme.surface),
+              onTap: (sf.CalendarTapDetails details) {
                 dynamic appointments = details.appointments;
                 if (appointments != null) {
                   showEditEventModal(context, appointments[0]);
