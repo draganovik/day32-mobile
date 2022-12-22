@@ -84,8 +84,8 @@ class _EditEventModalState extends State<EditEventModal> {
 
         setState(() {
           _isLoading = false;
+          Navigator.of(context).pop('added');
         });
-        Navigator.of(context).pop('added');
       } else {
         if (_event?.id != '') {
           final googleResponseEvent =
@@ -97,8 +97,8 @@ class _EditEventModalState extends State<EditEventModal> {
           }
           setState(() {
             _isLoading = false;
+            Navigator.of(context).pop('eddited');
           });
-          Navigator.of(context).pop('eddited');
         }
       }
     }

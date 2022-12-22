@@ -2,9 +2,9 @@ import '../providers/app_settings_provider.dart';
 import '../widgets/edit_event_modal.dart';
 import 'package:provider/provider.dart';
 
-import '../views/calendar_page.dart';
-import '../views/explore_page.dart';
-import '../views/profile_page.dart';
+import '../pages/calendar_page.dart';
+import '../pages/explore_page.dart';
+import '../pages/profile_page.dart';
 import '../widgets/application_bar.dart';
 import 'package:flutter/material.dart';
 
